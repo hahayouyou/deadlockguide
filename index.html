@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Deadlock Database - Hero guides, mod tutorials, and game mechanics. Unofficial community hub.">
+    <meta name="keywords" content="Deadlock, game guides, mods, heroes, Valve">
+    <title>DEADLOCK // DATABASE</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', 'Share Tech Mono', monospace;
+            background: #0b0b12;
+            color: #e0e0e8;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background Grid */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(#00f2ff08 1px, transparent 1px),
+                linear-gradient(90deg, #00f2ff08 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -1;
+            animation: gridMove 20s linear infinite;
+        }
+        
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        /* Glow Orbs */
+        .glow-orb {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,242,255,0.08), transparent);
+            pointer-events: none;
+            z-index: -1;
+            animation: float 15s ease-in-out infinite;
+        }
+        
+        .glow-orb:nth-child(1) { top: -150px; left: -150px; background: radial-gradient(circle, rgba(0,242,255,0.1), transparent); }
+        .glow-orb:nth-child(2) { bottom: -150px; right: -150px; background: radial-gradient(circle, rgba(255,0,170,0.08), transparent); animation-delay: -5s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(50px, 30px); }
+        }
+        
+        /* Scanline */
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.1) 0px, transparent 1px, transparent 4px);
+            pointer-events: none;
+            z-index: 999;
+        }
+        
+        /* Navigation */
+        .navbar {
+            background: rgba(8, 8, 18, 0.95);
+            backdrop-filter: blur(12px);
+            padding: 0.8rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #00f2ff;
+            box-shadow: 0 0 20px rgba(0,242,255,0.1);
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00f2ff, #ff00aa);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-decoration: none;
+            letter-spacing: 2px;
+        }
+        
+        .logo small {
+            font-size: 0.6rem;
+            letter-spacing: 1px;
+            background: none;
+            display: block;
+            color: #00f2ff;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links a {
+            color: #a0a0cc;
+            text-decoration: none;
+            font-family: 'Share Tech Mono', monospace;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        
+        .nav-links a:hover {
+            color: #00f2ff;
+            text-shadow: 0 0 5px #00f2ff;
+        }
+        
+        .cyber-btn {
+            background: transparent;
+            border: 1px solid #ff00aa;
+            color: #ff00aa;
+            padding: 0.4rem 1.2rem;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .cyber-btn:hover {
+            background: rgba(255,0,170,0.15);
+            box-shadow: 0 0 10px rgba(255,0,170,0.3);
+        }
+        
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #00f2ff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(0,242,255,0.2);
+            background: rgba(8,8,18,0.4);
+            backdrop-filter: blur(4px);
+            position: relative;
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            background: rgba(0,242,255,0.1);
+            border: 1px solid #00f2ff;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
+            font-family: monospace;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #00f2ff, #ff00aa);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: 3px;
+        }
+        
+        .hero p {
+            color: #888;
+            margin-top: 1rem;
+        }
+        
+        .loading-text {
+            font-family: monospace;
+            font-size: 0.7rem;
+            color: #ff00aa;
+            margin: 1rem 0;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .progress-bar {
+            width: 200px;
+            height: 2px;
+            background: rgba(0,242,255,0.2);
+            margin: 1rem auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, #00f2ff, transparent);
+            animation: slide 1.5s infinite;
+        }
+        
+        @keyframes slide {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        /* Search */
+        .search-container {
+            max-width: 400px;
+            margin: 2rem auto 0;
+        }
+        
+        .search-container input {
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid #00f2ff;
+            color: #00f2ff;
+            font-family: 'Share Tech Mono', monospace;
+            outline: none;
+        }
+        
+        .search-container input::placeholder {
+            color: #446;
+        }
+        
+        /* Section Titles */
+        .section-title {
+            font-size: 1.3rem;
+            margin: 2rem 0 1rem;
+            padding-left: 1rem;
+            border-left: 3px solid #ff00aa;
+            font-family: 'Share Tech Mono', monospace;
+            letter-spacing: 1px;
+        }
+        
+        /* Hero Grid - No Names */
+        .hero-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0 3rem;
+        }
+        
+        .hero-card {
+            background: rgba(10,10,20,0.7);
+            border: 1px solid rgba(0,242,255,0.15);
+            padding: 1.5rem;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+            backdrop-filter: blur(4px);
+        }
+        
+        .hero-card:hover {
+            transform: translateY(-4px);
+            border-color: #00f2ff;
+            box-shadow: 0 0 20px rgba(0,242,255,0.1);
+        }
+        
+        .hero-avatar {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, #00f2ff20, #ff00aa20);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            border: 1px solid rgba(0,242,255,0.3);
+        }
+        
+        .hero-codename {
+            font-family: 'Share Tech Mono', monospace;
+            color: #ff00aa;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+        }
+        
+        .hero-role {
+            font-size: 0.75rem;
+            color: #888;
+            margin: 0.5rem 0;
+        }
+        
+        .hero-desc {
+            font-size: 0.8rem;
+            color: #aaa;
+            margin: 0.8rem 0;
+        }
+        
+        /* Guide List */
+        .guide-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin: 1rem 0 2rem;
+        }
+        
+        .guide-item {
+            background: rgba(8,8,18,0.6);
+            border-left: 2px solid #00f2ff;
+            padding: 0.8rem 1.2rem;
+            transition: all 0.2s;
+        }
+        
+        .guide-item:hover {
+            background: rgba(0,242,255,0.05);
+            transform: translateX(4px);
+        }
+        
+        .guide-item a {
+            color: #00e5ff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        
+        .guide-item p {
+            color: #777;
+            font-size: 0.75rem;
+            margin-top: 0.3rem;
+        }
+        
+        /* Mod Cards */
+        .mod-card {
+            background: rgba(8,8,18,0.6);
+            border: 1px solid rgba(255,0,170,0.25);
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+        
+        .mod-card:hover {
+            border-color: #00f2ff;
+            background: rgba(0,242,255,0.03);
+        }
+        
+        .mod-card h3 {
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            color: #ff00aa;
+        }
+        
+        .mod-card p {
+            font-size: 0.8rem;
+            color: #888;
+        }
+        
+        .btn-link {
+            display: inline-block;
+            margin-top: 0.6rem;
+            color: #00f2ff;
+            text-decoration: none;
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid rgba(0,242,255,0.15);
+            font-size: 0.7rem;
+            color: #668;
+            font-family: monospace;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            max-width: 700px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            background: #0a0a18;
+            border: 2px solid #00f2ff;
+            padding: 1.5rem;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #ff00aa;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem 0;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="glow-orb"></div>
+    <div class="glow-orb"></div>
+    <div class="scanline"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">DEADLOCK.DB<br><small>> community database</small></a>
+            <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+            <div class="nav-links" id="navLinks">
+                <a href="#heroes">[ AGENTS ]</a>
+                <a href="#guides">[ GUIDES ]</a>
+                <a href="#mods">[ MODS ]</a>
+                <button class="cyber-btn" id="themeBtn"><i class="fas fa-sync-alt"></i> MODE</button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main -->
+    <div class="container">
+        <!-- Hero -->
+        <div class="hero">
+            <div class="hero-badge">>> SYSTEM ONLINE <<</div>
+            <h1>DEADLOCK // DATABASE</h1>
+            <div class="loading-text"><i class="fas fa-circle-notch fa-spin"></i> neural link established <i class="fas fa-circle-notch fa-spin"></i></div>
+            <div class="progress-bar"></div>
+            <p>hero guides // mod workshop // tactical manual</p>
+            
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="> search agent database ..." onkeyup="filterHeroes()">
+            </div>
+        </div>
+        
+        <!-- Heroes Section - NO NAMES displayed -->
+        <h2 class="section-title" id="heroes">▸ AGENT ROSTER</h2>
+        <div class="hero-grid" id="heroGrid">
+            <!-- Agents will be populated via JS -->
+        </div>
+        
+        <!-- Guides Section -->
+        <h2 class="section-title" id="guides">▸ TACTICAL MANUAL</h2>
+        <div class="guide-list" id="guideList"></div>
+        
+        <!-- Mods Section -->
+        <h2 class="section-title" id="mods">▸ MOD WORKSHOP</h2>
+        <div id="modsList"></div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+        <p>> DEADLOCK.DB // unofficial community hub</p>
+        <p>contact: data@deadlock.db | status: online</p>
+        <p>> system ready // awaiting input &lt;</p>
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal" id="guideModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div id="modalBody">
+                <div style="text-align:center; padding:2rem;">
+                    <i class="fas fa-circle-notch fa-spin" style="font-size:2rem; color:#00f2ff;"></i>
+                    <p style="margin-top:1rem;">> loading agent data ...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // ========== AGENT DATA (No real names shown in UI) ==========
+        const AGENTS = [
+            { id: 1, codename: "AGENT_07", role: "Vanguard", desc: "Frontline tank with high survivability and crowd control.", avatar: "🛡️", internal: "Abrams" },
+            { id: 2, codename: "AGENT_13", role: "Marksman", desc: "Long-range precision carry. High burst damage.", avatar: "🎯", internal: "Wraith" },
+            { id: 3, codename: "AGENT_22", role: "Controller", desc: "Frost support. Team protection and zone control.", avatar: "❄️", internal: "Kelvin" },
+            { id: 4, codename: "AGENT_45", role: "Burst Mage", desc: "Cooldown-based combos. Explosive damage output.", avatar: "🌀", internal: "Bebop" },
+            { id: 5, codename: "AGENT_66", role: "Blaster", desc: "Lightning storms. Massive area damage.", avatar: "🌩️", internal: "Seven" },
+            { id: 6, codename: "AGENT_88", role: "Assassin", desc: "Stealth infiltrator. Eliminates backline targets.", avatar: "🗡️", internal: "Haze" }
+        ];
+        
+        // ========== GUIDES DATA ==========
+        const GUIDES = [
+            { title: "[ ECONOMY ] Soul System Complete Guide", desc: "How to earn and spend souls effectively. Master the economy.", link: "/guides/soul-system.html" },
+            { title: "[ LANING ] Deny & Last Hit Mechanics", desc: "Win your lane with proper creep denial and last hitting.", link: "/guides/deny-guide.html" },
+            { title: "[ MAP ] Teleporters, Mid Boss & Soul Urn", desc: "Rotations, objective control, and map awareness.", link: "/guides/map-guide.html" },
+            { title: "[ ITEMIZATION ] Core Builds for Each Agent", desc: "Optimal item paths and situational choices.", link: "/guides/itemization.html" }
+        ];
+        
+        // ========== MODS DATA ==========
+        const MODS = [
+            { title: "[ INSTALLATION ] How to Install Deadlock Mods", desc: "Step-by-step guide from Nexus Mods to your game client.", link: "/mods/install-guide.html" },
+            { title: "[ ESSENTIALS ] Top 10 Mods for 2026", desc: "Curated collection of must-have mods. Updated monthly.", link: "/mods/top-mods.html" }
+        ];
+        
+        // ========== RENDER HERO GRID ==========
+        function renderHeroGrid() {
+            const grid = document.getElementById('heroGrid');
+            grid.innerHTML = AGENTS.map(agent => `
+                <div class="hero-card" data-agent-id="${agent.id}" data-agent-name="${agent.internal.toLowerCase()}">
+                    <div class="hero-avatar">${agent.avatar}</div>
+                    <div class="hero-codename">> ${agent.codename}</div>
+                    <div class="hero-role">[ ${agent.role} ]</div>
+                    <div class="hero-desc">${agent.desc}</div>
+                    <button class="cyber-btn" style="font-size:0.7rem; margin-top:0.5rem;" onclick="loadAgentGuide(${agent.id})">[ VIEW PROFILE ]</button>
+                </div>
+            `).join('');
+        }
+        
+        // ========== RENDER GUIDES ==========
+        function renderGuides() {
+            const container = document.getElementById('guideList');
+            container.innerHTML = GUIDES.map(guide => `
+                <div class="guide-item">
+                    <a href="#">${guide.title}</a>
+                    <p>${guide.desc}</p>
+                </div>
+            `).join('');
+        }
+        
+        // ========== RENDER MODS ==========
+        function renderMods() {
+            const container = document.getElementById('modsList');
+            container.innerHTML = MODS.map(mod => `
+                <div class="mod-card">
+                    <h3>${mod.title}</h3>
+                    <p>${mod.desc}</p>
+                    <a href="#" class="btn-link">[ ACCESS ] →</a>
+                </div>
+            `).join('');
+        }
+        
+        // ========== LOAD AGENT GUIDE (Will be replaced with DeepSeek API) ==========
+        async function loadAgentGuide(agentId) {
+            const agent = AGENTS.find(a => a.id === agentId);
+            if (!agent) return;
+            
+            const modal = document.getElementById('guideModal');
+            const modalBody = document.getElementById('modalBody');
+            
+            modal.style.display = 'flex';
+            modalBody.innerHTML = `
+                <div style="text-align:center; padding:2rem;">
+                    <i class="fas fa-circle-notch fa-spin" style="font-size:2rem; color:#00f2ff;"></i>
+                    <p style="margin-top:1rem;">> querying neural network for ${agent.codename} ...</p>
+                    <div class="progress-bar" style="width:150px; margin:1rem auto;"></div>
+                </div>
+            `;
+            
+            // TODO: Replace with actual DeepSeek API call via Cloudflare Worker
+            // For now, show demo data
+            setTimeout(() => {
+                modalBody.innerHTML = `
+                    <h2 style="color:#00f2ff; margin-bottom:0.5rem;">${agent.codename}</h2>
+                    <div style="color:#ff00aa; font-family:monospace; margin-bottom:1rem;">> ${agent.role} // CLASSIFIED</div>
+                    
+                    <h3 style="color:#00f2ff; margin:1rem 0 0.5rem;">⚔️ ABILITIES</h3>
+                    <div style="margin-bottom:0.8rem; border-left:2px solid #ff00aa; padding-left:0.8rem;">
+                        <strong>ABILITY_01</strong><br>
+                        <span style="font-size:0.85rem;">Primary offensive skill with moderate cooldown.</span>
+                        <div style="font-size:0.75rem; color:#aaa; margin-top:0.2rem;">💡 Use to initiate fights.</div>
+                    </div>
+                    <div style="margin-bottom:0.8rem; border-left:2px solid #ff00aa; padding-left:0.8rem;">
+                        <strong>ABILITY_02</strong><br>
+                        <span style="font-size:0.85rem;">Defensive/mobility skill for positioning.</span>
+                        <div style="font-size:0.75rem; color:#aaa; margin-top:0.2rem;">💡 Save for escape or chase.</div>
+                    </div>
+                    
+                    <h3 style="color:#00f2ff; margin:1rem 0 0.5rem;">🎮 PLAYSTYLE</h3>
+                    <p style="font-size:0.9rem;">${agent.desc} Focus on ${agent.role.toLowerCase()} positioning. Communicate with team for maximum impact.</p>
+                    
+                    <h3 style="color:#00f2ff; margin:1rem 0 0.5rem;">🛒 ITEM BUILD</h3>
+                    <div><strong>Early:</strong> Boots → Basic Damage → Regen</div>
+                    <div><strong>Core:</strong> Core Item A → Core Item B → Core Item C</div>
+                    <div><strong>Situational:</strong> Anti-heal, Armor, Mobility</div>
+                    
+                    <h3 style="color:#00f2ff; margin:1rem 0 0.5rem;">💡 TIPS</h3>
+                    <ul style="margin-left:1rem;">
+                        <li>Learn ability combos in practice mode.</li>
+                        <li>Coordinate ultimate with team.</li>
+                        <li>Track enemy cooldowns before engaging.</li>
+                    </ul>
+                    
+                    <p style="margin-top:1rem; font-size:0.7rem; text-align:center; color:#668;">> data fetched from DEADLOCK.DB // v1.0 &lt;</p>
+                `;
+            }, 1000);
+        }
+        
+        function closeModal() {
+            document.getElementById('guideModal').style.display = 'none';
+        }
+        
+        // ========== FILTER HEROES ==========
+        function filterHeroes() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.hero-card');
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                card.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        }
+        
+        // ========== THEME TOGGLE (Cyber/Matrix) ==========
+        let darkMode = true;
+        document.getElementById('themeBtn').addEventListener('click', () => {
+            darkMode = !darkMode;
+            document.body.style.background = darkMode ? '#0b0b12' : '#e8e8f0';
+            document.body.style.color = darkMode ? '#e0e0e8' : '#1a1a2e';
+            document.querySelector('.navbar').style.background = darkMode ? 'rgba(8,8,18,0.95)' : 'rgba(240,240,250,0.95)';
+        });
+        
+        // ========== MOBILE MENU ==========
+        document.getElementById('menuToggle').addEventListener('click', () => {
+            document.getElementById('navLinks').classList.toggle('active');
+        });
+        
+        // ========== INITIALIZE ==========
+        renderHeroGrid();
+        renderGuides();
+        renderMods();
+    </script>
+</body>
+</html>

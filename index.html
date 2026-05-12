@@ -1,695 +1,1700 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Deadlock Database - Hero guides, mod tutorials, and game mechanics. Unofficial community hub.">
-    <meta name="keywords" content="Deadlock, game guides, mods, heroes, Valve">
-    <title>DEADLOCK // DATABASE</title>
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Space Grotesk', 'Share Tech Mono', monospace;
-            background: #0b0b12;
-            color: #e0e0e8;
-            line-height: 1.5;
-            overflow-x: hidden;
-        }
-        
-        /* Animated Background Grid */
-        .bg-grid {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(#00f2ff08 1px, transparent 1px),
-                linear-gradient(90deg, #00f2ff08 1px, transparent 1px);
-            background-size: 50px 50px;
-            pointer-events: none;
-            z-index: -1;
-            animation: gridMove 20s linear infinite;
-        }
-        
-        @keyframes gridMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
-        }
-        
-        /* Glow Orbs */
-        .glow-orb {
-            position: fixed;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0,242,255,0.08), transparent);
-            pointer-events: none;
-            z-index: -1;
-            animation: float 15s ease-in-out infinite;
-        }
-        
-        .glow-orb:nth-child(1) { top: -150px; left: -150px; background: radial-gradient(circle, rgba(0,242,255,0.1), transparent); }
-        .glow-orb:nth-child(2) { bottom: -150px; right: -150px; background: radial-gradient(circle, rgba(255,0,170,0.08), transparent); animation-delay: -5s; }
-        
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(50px, 30px); }
-        }
-        
-        /* Scanline */
-        .scanline {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.1) 0px, transparent 1px, transparent 4px);
-            pointer-events: none;
-            z-index: 999;
-        }
-        
-        /* Navigation */
-        .navbar {
-            background: rgba(8, 8, 18, 0.95);
-            backdrop-filter: blur(12px);
-            padding: 0.8rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid #00f2ff;
-            box-shadow: 0 0 20px rgba(0,242,255,0.1);
-        }
-        
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #00f2ff, #ff00aa);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            text-decoration: none;
-            letter-spacing: 2px;
-        }
-        
-        .logo small {
-            font-size: 0.6rem;
-            letter-spacing: 1px;
-            background: none;
-            display: block;
-            color: #00f2ff;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        
-        .nav-links a {
-            color: #a0a0cc;
-            text-decoration: none;
-            font-family: 'Share Tech Mono', monospace;
-            transition: all 0.2s;
-            font-size: 0.9rem;
-        }
-        
-        .nav-links a:hover {
-            color: #00f2ff;
-            text-shadow: 0 0 5px #00f2ff;
-        }
-        
-        .cyber-btn {
-            background: transparent;
-            border: 1px solid #ff00aa;
-            color: #ff00aa;
-            padding: 0.4rem 1.2rem;
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .cyber-btn:hover {
-            background: rgba(255,0,170,0.15);
-            box-shadow: 0 0 10px rgba(255,0,170,0.3);
-        }
-        
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: #00f2ff;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        /* Main Container */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 4rem 1rem;
-            margin-bottom: 3rem;
-            border: 1px solid rgba(0,242,255,0.2);
-            background: rgba(8,8,18,0.4);
-            backdrop-filter: blur(4px);
-            position: relative;
-        }
-        
-        .hero-badge {
-            display: inline-block;
-            padding: 0.3rem 1rem;
-            background: rgba(0,242,255,0.1);
-            border: 1px solid #00f2ff;
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            margin-bottom: 1rem;
-            font-family: monospace;
-        }
-        
-        .hero h1 {
-            font-size: 3rem;
-            background: linear-gradient(135deg, #00f2ff, #ff00aa);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            letter-spacing: 3px;
-        }
-        
-        .hero p {
-            color: #888;
-            margin-top: 1rem;
-        }
-        
-        .loading-text {
-            font-family: monospace;
-            font-size: 0.7rem;
-            color: #ff00aa;
-            margin: 1rem 0;
-            animation: pulse 1.5s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        
-        .progress-bar {
-            width: 200px;
-            height: 2px;
-            background: rgba(0,242,255,0.2);
-            margin: 1rem auto;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .progress-bar::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, #00f2ff, transparent);
-            animation: slide 1.5s infinite;
-        }
-        
-        @keyframes slide {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-        
-        /* Search */
-        .search-container {
-            max-width: 400px;
-            margin: 2rem auto 0;
-        }
-        
-        .search-container input {
-            width: 100%;
-            padding: 0.8rem 1.2rem;
-            background: rgba(0,0,0,0.6);
-            border: 1px solid #00f2ff;
-            color: #00f2ff;
-            font-family: 'Share Tech Mono', monospace;
-            outline: none;
-        }
-        
-        .search-container input::placeholder {
-            color: #446;
-        }
-        
-        /* Section Titles */
-        .section-title {
-            font-size: 1.3rem;
-            margin: 2rem 0 1rem;
-            padding-left: 1rem;
-            border-left: 3px solid #ff00aa;
-            font-family: 'Share Tech Mono', monospace;
-            letter-spacing: 1px;
-        }
-        
-        /* Hero Grid - No Names */
-        .hero-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 1.5rem;
-            margin: 1.5rem 0 3rem;
-        }
-        
-        .hero-card {
-            background: rgba(10,10,20,0.7);
-            border: 1px solid rgba(0,242,255,0.15);
-            padding: 1.5rem;
-            transition: all 0.25s ease;
-            cursor: pointer;
-            text-align: center;
-            position: relative;
-            backdrop-filter: blur(4px);
-        }
-        
-        .hero-card:hover {
-            transform: translateY(-4px);
-            border-color: #00f2ff;
-            box-shadow: 0 0 20px rgba(0,242,255,0.1);
-        }
-        
-        .hero-avatar {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto 1rem;
-            background: linear-gradient(135deg, #00f2ff20, #ff00aa20);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            border: 1px solid rgba(0,242,255,0.3);
-        }
-        
-        .hero-codename {
-            font-family: 'Share Tech Mono', monospace;
-            color: #ff00aa;
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-        }
-        
-        .hero-role {
-            font-size: 0.75rem;
-            color: #888;
-            margin: 0.5rem 0;
-        }
-        
-        .hero-desc {
-            font-size: 0.8rem;
-            color: #aaa;
-            margin: 0.8rem 0;
-        }
-        
-        /* Guide List */
-        .guide-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-            margin: 1rem 0 2rem;
-        }
-        
-        .guide-item {
-            background: rgba(8,8,18,0.6);
-            border-left: 2px solid #00f2ff;
-            padding: 0.8rem 1.2rem;
-            transition: all 0.2s;
-        }
-        
-        .guide-item:hover {
-            background: rgba(0,242,255,0.05);
-            transform: translateX(4px);
-        }
-        
-        .guide-item a {
-            color: #00e5ff;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-        }
-        
-        .guide-item p {
-            color: #777;
-            font-size: 0.75rem;
-            margin-top: 0.3rem;
-        }
-        
-        /* Mod Cards */
-        .mod-card {
-            background: rgba(8,8,18,0.6);
-            border: 1px solid rgba(255,0,170,0.25);
-            padding: 1.2rem;
-            margin-bottom: 1rem;
-            transition: all 0.2s;
-        }
-        
-        .mod-card:hover {
-            border-color: #00f2ff;
-            background: rgba(0,242,255,0.03);
-        }
-        
-        .mod-card h3 {
-            font-size: 1rem;
-            margin-bottom: 0.3rem;
-            color: #ff00aa;
-        }
-        
-        .mod-card p {
-            font-size: 0.8rem;
-            color: #888;
-        }
-        
-        .btn-link {
-            display: inline-block;
-            margin-top: 0.6rem;
-            color: #00f2ff;
-            text-decoration: none;
-            font-family: monospace;
-            font-size: 0.75rem;
-        }
-        
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 2rem;
-            border-top: 1px solid rgba(0,242,255,0.15);
-            font-size: 0.7rem;
-            color: #668;
-            font-family: monospace;
-        }
-        
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal-content {
-            max-width: 700px;
-            width: 90%;
-            max-height: 85vh;
-            overflow-y: auto;
-            background: #0a0a18;
-            border: 2px solid #00f2ff;
-            padding: 1.5rem;
-            position: relative;
-        }
-        
-        .modal-close {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background: none;
-            border: none;
-            color: #ff00aa;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .menu-toggle {
-                display: block;
-            }
-            .nav-links {
-                display: none;
-                width: 100%;
-                flex-direction: column;
-                text-align: center;
-                padding: 1rem 0;
-            }
-            .nav-links.active {
-                display: flex;
-            }
-            .hero h1 {
-                font-size: 1.8rem;
-            }
-            .container {
-                padding: 1rem;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Deadlock Codex — Master the Arcane Arts of Combat">
+<title>DEADLOCK — Codex of Agents</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   DEADLOCK CODEX
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Variables ─────────────────────────────── */
+:root {
+  --bg: #050505;
+  --bg-elevated: #0a0a0a;
+  --text: #ffffff;
+  --text-secondary: #ece2d0;
+  --brass: #b86b2c;
+  --brass-dim: rgba(184, 107, 44, 0.25);
+  --font-heading: 'Cinzel', serif;
+  --font-body: 'Crimson Text', 'Noto Serif SC', serif;
+  --font-cn: 'Noto Serif SC', serif;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-smooth: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --container: 1320px;
+}
+
+/* ── Reset ─────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: #b86b2c #0a0a0a;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body.font-cn { font-family: var(--font-cn); }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+img { max-width: 100%; display: block; }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0a0a0a; }
+::-webkit-scrollbar-thumb { background: #b86b2c; border-radius: 3px; }
+::selection { background: rgba(184,107,44,0.35); color: #fff; }
+
+/* ── Navigation ────────────────────────────── */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 0 32px;
+  background: rgba(5,5,5,0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(184,107,44,0.10);
+  transition: background 0.25s;
+}
+.nav-container {
+  max-width: var(--container);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+.nav-logo {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 900;
+  letter-spacing: 0.25em;
+  color: var(--text);
+  transition: color 0.25s;
+  white-space: nowrap;
+}
+.nav-logo:hover { color: var(--brass); }
+.nav-logo span { color: var(--brass); }
+
+.nav-links { display: flex; gap: 36px; align-items: center; }
+.nav-links a {
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  transition: color 0.25s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px; left: 0;
+  width: 0; height: 1px;
+  background: var(--brass);
+  transition: width 0.25s var(--ease);
+}
+.nav-links a:hover, .nav-links a.active { color: var(--text); }
+.nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+
+.nav-lang {
+  display: flex; gap: 1px;
+  border: 1px solid rgba(184,107,44,0.3);
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.nav-lang button {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.45);
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.nav-lang button.active { background: var(--brass); color: #fff; }
+.nav-lang button:hover:not(.active) { color: var(--brass); }
+
+.nav-toggle {
+  display: none;
+  flex-direction: column; gap: 5px;
+  background: none; border: none;
+  cursor: pointer; padding: 4px;
+}
+.nav-toggle span {
+  display: block;
+  width: 22px; height: 1.5px;
+  background: var(--text);
+  transition: all 0.25s;
+}
+
+/* ── Hero Section ──────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 24px 80px;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 40%, rgba(184,107,44,0.05) 0%, transparent 55%);
+}
+
+/* ── Background Magic Circles ──────────────── */
+	.bg-magic {
+	  position: absolute;
+	  pointer-events: none;
+	  z-index: 0;
+	}
+	.bg-magic svg {
+	  filter: drop-shadow(0 0 22px rgba(184, 107, 44, 0.10));
+	}
+	.bg-magic__inner {
+	  width: 100%; height: 100%;
+	}
+
+	/* Circle 1 ─ Grand Pentagram (super-sized, top-left dominant) */
+	.bg-magic--1 {
+	  top: -14%; left: -24%;
+	  width: min(1120px, 86vw);
+	  height: min(1120px, 86vw);
+	  opacity: 0.23;
+	}
+	.bg-magic--1 .bg-magic__inner { animation: spin3d_1 33s linear infinite; }
+
+	/* Circle 2 ─ Rune Matrix (large, right side) */
+	.bg-magic--2 {
+	  top: 4%; right: -28%;
+	  width: min(920px, 72vw);
+	  height: min(920px, 72vw);
+	  opacity: 0.20;
+	}
+	.bg-magic--2 .bg-magic__inner { animation: spin3d_2 37s linear infinite; }
+
+	/* Circle 3 ─ Hexagram (medium-large, bottom-left) */
+	.bg-magic--3 {
+	  bottom: -14%; left: 8%;
+	  width: min(660px, 52vw);
+	  height: min(660px, 52vw);
+	  opacity: 0.14;
+	}
+	.bg-magic--3 .bg-magic__inner { animation: spin3d_3 28s linear infinite; }
+
+	/* Circle 4 ─ Octagram Compass (medium, upper-right area) */
+	.bg-magic--4 {
+	  top: -10%; right: 12%;
+	  width: min(520px, 41vw);
+	  height: min(520px, 41vw);
+	  opacity: 0.13;
+	}
+	.bg-magic--4 .bg-magic__inner { animation: spin3d_4 41s linear infinite; }
+
+	/* Circle 5 ─ Triple Ring Sigil (medium-small, mid-left) */
+	.bg-magic--5 {
+	  top: 32%; left: -15%;
+	  width: min(400px, 31vw);
+	  height: min(400px, 31vw);
+	  opacity: 0.15;
+	}
+	.bg-magic--5 .bg-magic__inner { animation: spin3d_5 30s linear infinite; }
+
+	/* Circle 6 ─ Compact Ward (small accent, bottom-right) */
+	.bg-magic--6 {
+	  bottom: 6%; right: 5%;
+	  width: min(290px, 23vw);
+	  height: min(290px, 23vw);
+	  opacity: 0.19;
+	}
+	.bg-magic--6 .bg-magic__inner { animation: spin3d_6 25s linear infinite; }
+
+	/* 3D spin keyframes ─ each circle tilted at a different angle in 3D space */
+	@keyframes spin3d_1 {
+	  from { transform: perspective(1400px) rotateX(17deg) rotateY(-13deg) rotateZ(0deg); }
+	  to   { transform: perspective(1400px) rotateX(17deg) rotateY(-13deg) rotateZ(360deg); }
+	}
+	@keyframes spin3d_2 {
+	  from { transform: perspective(1400px) rotateX(-10deg) rotateY(19deg) rotateZ(0deg); }
+	  to   { transform: perspective(1400px) rotateX(-10deg) rotateY(19deg) rotateZ(-360deg); }
+	}
+	@keyframes spin3d_3 {
+	  from { transform: perspective(1400px) rotateX(21deg) rotateY(7deg) rotateZ(0deg); }
+	  to   { transform: perspective(1400px) rotateX(21deg) rotateY(7deg) rotateZ(360deg); }
+	}
+	@keyframes spin3d_4 {
+	  from { transform: perspective(1400px) rotateX(-5deg) rotateY(-23deg) rotateZ(0deg); }
+	  to   { transform: perspective(1400px) rotateX(-5deg) rotateY(-23deg) rotateZ(-360deg); }
+	}
+	@keyframes spin3d_5 {
+	  from { transform: perspective(1400px) rotateX(13deg) rotateY(-9deg) rotateZ(0deg); }
+	  to   { transform: perspective(1400px) rotateX(13deg) rotateY(-9deg) rotateZ(360deg); }
+	}
+	@keyframes spin3d_6 {
+	  from { transform: perspective(1400px) rotateX(-15deg) rotateY(11deg) rotateZ(0deg); }
+	  to   { transform: perspective(1400px) rotateX(-15deg) rotateY(11deg) rotateZ(-360deg); }
+	}
+
+	@keyframes spinSlow { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+/* Floating particles */
+.hero-particles { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.hero-particle {
+  position: absolute;
+  bottom: -10px;
+  background: var(--brass);
+  border-radius: 50%;
+  animation: floatUp var(--dur) var(--delay) infinite ease-in;
+  opacity: 0;
+}
+@keyframes floatUp {
+  0% { transform: translateY(0) scale(1); opacity: 0; }
+  15% { opacity: 0.6; }
+  50% { opacity: 0.2; }
+  85% { opacity: 0.03; }
+  100% { transform: translateY(-110vh) scale(0.2); opacity: 0; }
+}
+
+/* Hero content */
+.hero-content { position: relative; z-index: 1; max-width: 800px; }
+.hero-badge {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  letter-spacing: 0.38em;
+  color: var(--brass);
+  text-transform: uppercase;
+  padding: 8px 24px;
+  border: 1px solid rgba(184,107,44,0.22);
+  border-radius: 2px;
+  margin-bottom: 32px;
+}
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-shadow:
+    0 0 60px rgba(184,107,44,0.30),
+    0 0 120px rgba(184,107,44,0.10),
+    0 0 200px rgba(184,107,44,0.05);
+  margin-bottom: 20px;
+}
+.hero-title .accent { color: var(--brass); }
+.hero-subtitle {
+  font-family: var(--font-heading);
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+}
+.hero-divider {
+  width: 80px; height: 1px;
+  background: var(--brass);
+  margin: 0 auto 32px;
+  opacity: 0.6;
+}
+.hero-desc {
+  font-size: 1.05rem;
+  color: rgba(236,226,208,0.6);
+  max-width: 600px;
+  margin: 0 auto 48px;
+  line-height: 1.85;
+}
+
+/* ── Section Dividers ──────────────────────── */
+.section-divider {
+  display: flex;
+  align-items: center; justify-content: center;
+  gap: 18px;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 24px;
+  opacity: 0.35;
+}
+.section-divider .line {
+  height: 1px; flex: 1;
+  background: linear-gradient(to right, transparent, var(--brass), transparent);
+}
+.section-divider .diamond {
+  width: 8px; height: 8px;
+  background: var(--brass);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+/* ── Section Header ────────────────────────── */
+.section-header { text-align: center; margin-bottom: 60px; }
+.section-label {
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  letter-spacing: 0.38em;
+  color: var(--brass);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.section-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}
+.section-title .accent { color: var(--brass); }
+.section-line {
+  width: 60px; height: 2px;
+  background: var(--brass);
+  margin: 0 auto;
+}
+
+/* ── Heroes Section ────────────────────────── */
+.heroes {
+  position: relative;
+  padding: 100px 24px;
+  max-width: var(--container);
+  margin: 0 auto;
+}
+.heroes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 26px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Background subtle circle for heroes section */
+.heroes-bg-circle {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; height: 600px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.06;
+  animation: spinSlow 40s linear infinite;
+}
+
+/* ── Hero Card ─────────────────────────────── */
+.hero-card {
+  position: relative;
+  background: var(--bg-elevated);
+  padding: 38px 24px 32px;
+  text-align: center;
+  overflow: hidden;
+  z-index: 1;
+  transition: box-shadow 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.hero-card:hover {
+  z-index: 10;
+  transform: translateY(-3px);
+}
+
+/* Magic rings */
+.magic-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.magic-ring--outer {
+  width: calc(100% + 60px);
+  aspect-ratio: 1;
+  border: 1.5px dashed var(--ring-color);
+  animation: spinMagic 28s linear infinite;
+}
+.magic-ring--inner {
+  width: calc(100% + 34px);
+  aspect-ratio: 1;
+  border: 1px dotted var(--ring-color);
+  animation: spinMagicReverse 22s linear infinite;
+}
+.magic-ring--glyphs {
+  width: calc(100% + 90px);
+  aspect-ratio: 1;
+  background: conic-gradient(from 0deg,
+    transparent 0deg,   var(--ring-color) 10deg, transparent 20deg,
+    transparent 40deg,  var(--ring-color) 50deg, transparent 60deg,
+    transparent 80deg,  var(--ring-color) 90deg, transparent 100deg,
+    transparent 120deg, var(--ring-color) 130deg,transparent 140deg,
+    transparent 160deg, var(--ring-color) 170deg,transparent 180deg,
+    transparent 200deg, var(--ring-color) 210deg,transparent 220deg,
+    transparent 240deg, var(--ring-color) 250deg,transparent 260deg,
+    transparent 280deg, var(--ring-color) 290deg,transparent 300deg,
+    transparent 320deg, var(--ring-color) 330deg,transparent 340deg
+  );
+  -webkit-mask: radial-gradient(circle, transparent 38%, #000 39%, #000 42%, transparent 43%);
+  mask: radial-gradient(circle, transparent 38%, #000 39%, #000 42%, transparent 43%);
+  animation: spinMagic 32s linear infinite;
+}
+.hero-card:hover .magic-ring { opacity: 1; }
+
+@keyframes spinMagic { to { transform: translate(-50%, -50%) rotate(360deg); } }
+@keyframes spinMagicReverse { to { transform: translate(-50%, -50%) rotate(-360deg); } }
+
+/* Card inner */
+.card-avatar {
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center; justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 1.7rem;
+  font-weight: 900;
+  position: relative; z-index: 1;
+}
+.card-avatar-bg {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  opacity: 0.18;
+  transition: opacity 0.25s;
+}
+.hero-card:hover .card-avatar-bg { opacity: 0.40; }
+
+.card-code {
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  color: var(--ring-color);
+  margin-bottom: 4px;
+  position: relative; z-index: 1;
+}
+.card-role {
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--text);
+  margin-bottom: 12px;
+  position: relative; z-index: 1;
+}
+.card-desc {
+  font-size: 0.85rem;
+  color: rgba(236,226,208,0.5);
+  line-height: 1.6;
+  position: relative; z-index: 1;
+}
+
+/* Corner accents */
+.card-corner {
+  position: absolute;
+  width: 10px; height: 10px;
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.card-corner.tl { top: 5px; left: 5px; border-top: 1px solid var(--ring-color); border-left: 1px solid var(--ring-color); }
+.card-corner.tr { top: 5px; right: 5px; border-top: 1px solid var(--ring-color); border-right: 1px solid var(--ring-color); }
+.card-corner.bl { bottom: 5px; left: 5px; border-bottom: 1px solid var(--ring-color); border-left: 1px solid var(--ring-color); }
+.card-corner.br { bottom: 5px; right: 5px; border-bottom: 1px solid var(--ring-color); border-right: 1px solid var(--ring-color); }
+.hero-card:hover .card-corner { opacity: 1; }
+
+/* ── Guides Section ────────────────────────── */
+.guides {
+  padding: 100px 24px;
+  max-width: var(--container);
+  margin: 0 auto;
+}
+.guides-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+.guide-card {
+  background: var(--bg-elevated);
+  padding: 34px 26px 30px;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.guide-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--brass), transparent);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.guide-card:hover {
+  box-shadow: 0 0 30px var(--brass-dim);
+  transform: translateY(-3px);
+}
+.guide-card:hover::before { opacity: 1; }
+.guide-icon {
+  font-size: 2rem;
+  margin-bottom: 16px;
+  display: block;
+}
+.guide-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.08rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+.guide-card p {
+  font-size: 0.85rem;
+  color: rgba(236,226,208,0.5);
+  line-height: 1.65;
+}
+.guide-number {
+  position: absolute;
+  top: 10px; right: 16px;
+  font-family: var(--font-heading);
+  font-size: 2.6rem;
+  font-weight: 900;
+  color: rgba(184,107,44,0.05);
+  pointer-events: none;
+}
+
+/* ── Mods Section ──────────────────────────── */
+.mods {
+  padding: 100px 24px;
+  max-width: var(--container);
+  margin: 0 auto;
+}
+.mods-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+.mod-card {
+  background: var(--bg-elevated);
+  padding: 36px 26px 30px;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.mod-card:hover {
+  box-shadow: 0 0 30px var(--brass-dim);
+  transform: translateY(-3px);
+}
+.mod-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--brass), transparent);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.mod-card:hover::after { opacity: 1; }
+.mod-tag {
+  display: inline-block;
+  font-size: 0.55rem;
+  letter-spacing: 0.25em;
+  color: var(--brass);
+  text-transform: uppercase;
+  border: 1px solid rgba(184,107,44,0.22);
+  padding: 4px 12px;
+  border-radius: 2px;
+  margin-bottom: 16px;
+}
+.mod-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.18rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+.mod-card p {
+  font-size: 0.85rem;
+  color: rgba(236,226,208,0.5);
+  line-height: 1.65;
+}
+.mod-dl {
+  display: inline-flex;
+  align-items: center; gap: 6px;
+  margin-top: 16px;
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--brass);
+  text-transform: uppercase;
+  transition: gap 0.25s;
+}
+.mod-card:hover .mod-dl { gap: 12px; }
+
+/* ── Footer ────────────────────────────────── */
+.footer {
+  border-top: 1px solid rgba(184,107,44,0.10);
+  padding: 56px 24px 28px;
+  text-align: center;
+  position: relative;
+}
+.footer-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center; gap: 24px;
+  margin-bottom: 36px;
+}
+.footer-links {
+  display: flex; gap: 32px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.footer-links a {
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  transition: color 0.25s;
+}
+.footer-links a:hover { color: var(--brass); }
+.footer-divider {
+  width: 100%; max-width: 400px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(184,107,44,0.25), transparent);
+  margin: 0 auto 28px;
+}
+.footer-bottom p {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.22);
+  letter-spacing: 0.08em;
+}
+
+/* ── Candle Flame ──────────────────────────── */
+.candle-container {
+  position: fixed;
+  bottom: 36px; right: 36px;
+  pointer-events: none;
+  z-index: 5;
+}
+.candle-flame {
+  width: 16px; height: 28px;
+  background: radial-gradient(ellipse at center, #ffb347 0%, #b86b2c 38%, transparent 68%);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  animation: flicker 3s ease-in-out infinite alternate;
+  filter: blur(1px);
+}
+.candle-wick {
+  width: 2px; height: 8px;
+  background: #2a2a2a;
+  margin: -4px auto 0;
+}
+@keyframes flicker {
+  0%   { transform: scale(1, 1) rotate(-2deg); opacity: 0.65; }
+  20%  { transform: scale(1.08, 0.88) rotate(3deg); opacity: 0.9; }
+  40%  { transform: scale(0.82, 1.12) rotate(-3deg); opacity: 0.5; }
+  65%  { transform: scale(1.12, 0.9) rotate(2deg); opacity: 0.85; }
+  85%  { transform: scale(0.88, 1.08) rotate(-1deg); opacity: 0.55; }
+  100% { transform: scale(0.95, 1.05) rotate(1deg); opacity: 0.7; }
+}
+
+/* ── Fade-Up (scroll reveal) ───────────────── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s var(--ease-smooth), transform 0.65s var(--ease-smooth);
+}
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+
+
+/* ── Mouse Spotlight ───────────────────────── */
+.mouse-spotlight {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  background: radial-gradient(circle 420px at var(--mx, 50%) var(--my, 50%), rgba(184,107,44,0.045) 0%, transparent 65%);
+  transition: background 0.18s ease-out;
+  will-change: background;
+}
+@media (max-width: 768px) {
+  .mouse-spotlight { display: none; }
+}
+
+/* ── Reading Progress Bar ──────────────────── */
+.reading-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: var(--brass);
+  box-shadow: 0 0 10px rgba(184,107,44,0.5), 0 0 24px rgba(184,107,44,0.18);
+  z-index: 1002;
+  transform-origin: left;
+  transform: scaleX(var(--progress, 0));
+  transition: transform 0.08s linear;
+  will-change: transform;
+}
+
+/* ── Card 3D Tilt ──────────────────────────── */
+.hero-card--tilt-active {
+  transition: transform 0.12s ease-out;
+  transform-style: preserve-3d;
+}
+.hero-card--tilt-active .card-avatar,
+.hero-card--tilt-active .card-code,
+.hero-card--tilt-active .card-role,
+.hero-card--tilt-active .card-desc {
+  transition: transform 0.12s ease-out;
+}
+
+/* ── Click Ripple ──────────────────────────── */
+.ripple-container {
+  position: relative;
+  overflow: hidden;
+}
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(184,107,44,0.35);
+  pointer-events: none;
+  animation: rippleOut 0.7s ease-out forwards;
+  z-index: 100;
+}
+@keyframes rippleOut {
+  0%   { transform: translate(-50%, -50%) scale(0); opacity: 0.7; }
+  100% { transform: translate(-50%, -50%) scale(4); opacity: 0; }
+}
+
+/* ── Parallax wrapper ──────────────────────── */
+.bg-magic__parallax {
+  width: 100%; height: 100%;
+  will-change: transform;
+}
+
+/* ── Enhanced Fade-Up ──────────────────────── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(30px) scale(0.96);
+  transition: opacity 0.7s var(--ease-smooth), transform 0.7s var(--ease-smooth);
+}
+.fade-up.visible { opacity: 1; transform: translateY(0) scale(1); }
+
+/* ── Text Highlight Underline ──────────────── */
+.card-code::after, .card-role::after {
+  content: '';
+  position: absolute;
+  bottom: -3px; left: 0;
+  width: 100%; height: 1px;
+  background: var(--ring-color, var(--brass));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s var(--ease);
+}
+.hero-card:hover .card-code::after,
+.hero-card:hover .card-role::after {
+  transform: scaleX(1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1200px) {
+  .heroes-grid { gap: 18px; }
+  .hero-card { padding: 28px 16px 24px; }
+  .bg-magic--1 { width: min(620px, 58vw); height: min(620px, 58vw); left: -18%; opacity: 0.17; }
+  .bg-magic--2 { width: min(540px, 50vw); height: min(540px, 50vw); right: -18%; opacity: 0.15; }
+}
+
+@media (max-width: 1024px) {
+  .heroes-grid { grid-template-columns: repeat(2, 1fr); gap: 22px; }
+  .guides-grid { grid-template-columns: repeat(2, 1fr); }
+  .mods-grid   { grid-template-columns: repeat(2, 1fr); }
+  .candle-container { bottom: 20px; right: 20px; }
+  .bg-magic--1 { width: 420px; height: 420px; left: -14%; opacity: 0.13; }
+  .bg-magic--2 { width: 340px; height: 340px; right: -14%; opacity: 0.12; }
+  .bg-magic--4, .bg-magic--6 { display: none; }
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 64px; left: 0; right: 0;
+    background: rgba(5,5,5,0.95);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    flex-direction: column;
+    padding: 22px 0; gap: 20px;
+    border-bottom: 1px solid rgba(184,107,44,0.12);
+  }
+  .nav-links.open { display: flex; }
+  .nav-toggle { display: flex; }
+  .nav { padding: 0 20px; }
+  .nav-container { height: 56px; }
+
+  .heroes-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; gap: 20px; }
+  .guides-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+  .mods-grid   { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+
+  .hero { padding: 100px 20px 60px; }
+  .heroes, .guides, .mods { padding: 60px 20px; }
+  .section-header { margin-bottom: 40px; }
+
+  .bg-magic--1 { width: 300px; height: 300px; left: -40px; opacity: 0.10; top: 30%; }
+  .bg-magic--2 { width: 260px; height: 260px; right: -40px; opacity: 0.10; top: 55%; }
+  .bg-magic--4, .bg-magic--6 { display: none; }
+}
+
+@media (max-width: 480px) {
+  .nav-lang button { padding: 4px 10px; font-size: 0.62rem; }
+  .hero-title { font-size: 2rem; }
+  .hero-desc { font-size: 0.9rem; }
+  .card-code { font-size: 0.62rem; }
+  .card-role { font-size: 0.8rem; }
+  .card-desc { font-size: 0.78rem; }
+  .bg-magic--1, .bg-magic--2, .bg-magic--3, .bg-magic--4, .bg-magic--6 { display: none; }
+  .candle-container { display: none; }
+  .nav-logo { font-size: 1.1rem; }
+}
+
+/* ── Reduced Motion ────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
 </head>
 <body>
-    <div class="bg-grid"></div>
-    <div class="glow-orb"></div>
-    <div class="glow-orb"></div>
-    <div class="scanline"></div>
-    
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="/" class="logo">DEADLOCK.DB<br><small>> community database</small></a>
-            <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
-            <div class="nav-links" id="navLinks">
-                <a href="#heroes">[ AGENTS ]</a>
-                <a href="#guides">[ GUIDES ]</a>
-                <a href="#mods">[ MODS ]</a>
-                <button class="cyber-btn" id="themeBtn"><i class="fas fa-sync-alt"></i> MODE</button>
-            </div>
-        </div>
-    </nav>
-    
-    <!-- Main -->
-    <div class="container">
-        <!-- Hero -->
-        <div class="hero">
-            <div class="hero-badge">>> SYSTEM ONLINE <<</div>
-            <h1>DEADLOCK // DATABASE</h1>
-            <div class="loading-text"><i class="fas fa-circle-notch fa-spin"></i> neural link established <i class="fas fa-circle-notch fa-spin"></i></div>
-            <div class="progress-bar"></div>
-            <p>hero guides // mod workshop // tactical manual</p>
-            
-            <div class="search-container">
-                <input type="text" id="searchInput" placeholder="> search agent database ..." onkeyup="filterHeroes()">
-            </div>
-        </div>
-        
-        <!-- Heroes Section - NO NAMES displayed -->
-        <h2 class="section-title" id="heroes">▸ AGENT ROSTER</h2>
-        <div class="hero-grid" id="heroGrid">
-            <!-- Agents will be populated via JS -->
-        </div>
-        
-        <!-- Guides Section -->
-        <h2 class="section-title" id="guides">▸ TACTICAL MANUAL</h2>
-        <div class="guide-list" id="guideList"></div>
-        
-        <!-- Mods Section -->
-        <h2 class="section-title" id="mods">▸ MOD WORKSHOP</h2>
-        <div id="modsList"></div>
+<!-- Mouse Spotlight -->
+<div class="mouse-spotlight" id="mouseSpotlight"></div>
+<!-- Reading Progress -->
+<div class="reading-progress" id="readingProgress"></div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+   NAVIGATION
+   ═══════════════════════════════════════════════════════════════════════════ -->
+<nav class="nav" id="nav">
+  <div class="nav-container">
+    <a href="#hero" class="nav-logo">DEAD<span>LOCK</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#hero"   data-en="Home"   data-zh="首页" class="active">Home</a></li>
+      <li><a href="#heroes" data-en="Heroes" data-zh="英雄">Heroes</a></li>
+      <li><a href="#guides" data-en="Guides" data-zh="攻略">Guides</a></li>
+      <li><a href="#mods"   data-en="Mods"   data-zh="模组">Mods</a></li>
+    </ul>
+    <div class="nav-lang" id="navLang">
+      <button data-lang="en" class="active">EN</button>
+      <button data-lang="zh">中</button>
     </div>
-    
-    <!-- Footer -->
-    <div class="footer">
-        <p>> DEADLOCK.DB // unofficial community hub</p>
-        <p>contact: data@deadlock.db | status: online</p>
-        <p>> system ready // awaiting input &lt;</p>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+   MAIN CONTENT
+   ═══════════════════════════════════════════════════════════════════════════ -->
+<main>
+
+  <!-- ─── HERO ──────────────────────────────────── -->
+  <section class="hero" id="hero">
+
+    <!-- Background Magic Circles ═ 6 oversized, asymmetrically positioned, 3D-tilted -->
+	
+	    <!-- Circle 1: Grand Pentagram ═ super-sized, top-left -->
+	    <div class="bg-magic bg-magic--1">
+	      <div class="bg-magic__parallax"><div class="bg-magic__inner">
+	        <svg viewBox="0 0 400 400" fill="none" stroke="#b86b2c" xmlns="http://www.w3.org/2000/svg">
+	          <circle cx="200" cy="200" r="194" stroke-width="1.5"/>
+	          <circle cx="200" cy="200" r="180" stroke-width="0.7" stroke-dasharray="6 24"/>
+	          <circle cx="200" cy="200" r="162" stroke-width="1.1"/>
+	          <circle cx="200" cy="200" r="144" stroke-width="0.5" stroke-dasharray="3 16"/>
+	          <circle cx="200" cy="200" r="126" stroke-width="0.8"/>
+	          <circle cx="200" cy="200" r="108" stroke-width="0.5" stroke-dasharray="8 32"/>
+	          <polygon points="200,8 311.7,355.7 19.3,141.3 380.7,141.3 88.3,355.7" stroke-width="1.4"/>
+	          <polygon points="200,100 255,180 200,260 145,180" stroke-width="1.1"/>
+	          <polygon points="200,50 275,240 120,160 280,160 125,240" stroke-width="0.6" opacity="0.55"/>
+	          <circle cx="200" cy="8" r="5" fill="#b86b2c" stroke="none" opacity="0.85"/>
+	          <circle cx="311.7" cy="355.7" r="5" fill="#b86b2c" stroke="none" opacity="0.85"/>
+	          <circle cx="19.3" cy="141.3" r="5" fill="#b86b2c" stroke="none" opacity="0.85"/>
+	          <circle cx="380.7" cy="141.3" r="5" fill="#b86b2c" stroke="none" opacity="0.85"/>
+	          <circle cx="88.3" cy="355.7" r="5" fill="#b86b2c" stroke="none" opacity="0.85"/>
+	          <circle cx="200" cy="200" r="14" stroke-width="1.2"/>
+	          <circle cx="200" cy="200" r="5" fill="#b86b2c" stroke="none" opacity="0.5"/>
+	          <line x1="200" y1="186" x2="200" y2="14" stroke-width="0.4" opacity="0.35"/>
+	          <line x1="214" y1="200" x2="386" y2="200" stroke-width="0.4" opacity="0.35"/>
+	          <line x1="200" y1="214" x2="200" y2="386" stroke-width="0.4" opacity="0.35"/>
+	          <line x1="186" y1="200" x2="14" y2="200" stroke-width="0.4" opacity="0.35"/>
+	          <g stroke-width="1.3" opacity="0.45">
+	            <line x1="200" y1="26" x2="200" y2="42"/>
+	            <line x1="374" y1="200" x2="358" y2="200"/>
+	            <line x1="200" y1="374" x2="200" y2="358"/>
+	            <line x1="26" y1="200" x2="42" y2="200"/>
+	            <line x1="323" y1="77" x2="314" y2="86"/>
+	            <line x1="323" y1="323" x2="314" y2="314"/>
+	            <line x1="77" y1="323" x2="86" y2="314"/>
+	            <line x1="77" y1="77" x2="86" y2="86"/>
+	          </g>
+	        </svg>
+	      </div></div>
+	    </div>
+	
+	    <!-- Circle 2: Rune Matrix ═ large, right side -->
+	    <div class="bg-magic bg-magic--2">
+	      <div class="bg-magic__parallax"><div class="bg-magic__inner">
+	        <svg viewBox="0 0 400 400" fill="none" stroke="#b86b2c" xmlns="http://www.w3.org/2000/svg">
+	          <circle cx="200" cy="200" r="194" stroke-width="1.5"/>
+	          <circle cx="200" cy="200" r="182" stroke-width="0.6" stroke-dasharray="4 28"/>
+	          <circle cx="200" cy="200" r="164" stroke-width="1.2" stroke-dasharray="14 32"/>
+	          <circle cx="200" cy="200" r="144" stroke-width="0.7"/>
+	          <circle cx="200" cy="200" r="122" stroke-width="0.5" stroke-dasharray="5 22"/>
+	          <circle cx="200" cy="200" r="100" stroke-width="0.9"/>
+	          <line x1="200" y1="6" x2="200" y2="394" stroke-width="0.6"/>
+	          <line x1="6" y1="200" x2="394" y2="200" stroke-width="0.6"/>
+	          <line x1="62.8" y1="62.8" x2="337.2" y2="337.2" stroke-width="0.5"/>
+	          <line x1="337.2" y1="62.8" x2="62.8" y2="337.2" stroke-width="0.5"/>
+	          <line x1="118" y1="18" x2="282" y2="382" stroke-width="0.35" opacity="0.5"/>
+	          <line x1="282" y1="18" x2="118" y2="382" stroke-width="0.35" opacity="0.5"/>
+	          <line x1="18" y1="118" x2="382" y2="282" stroke-width="0.35" opacity="0.5"/>
+	          <line x1="382" y1="118" x2="18" y2="282" stroke-width="0.35" opacity="0.5"/>
+	          <path d="M 152,32 A 70,70 0 0,1 248,32" stroke-width="1.1"/>
+	          <path d="M 368,152 A 70,70 0 0,1 368,248" stroke-width="1.1"/>
+	          <path d="M 152,368 A 70,70 0 0,1 248,368" stroke-width="1.1"/>
+	          <path d="M 32,152 A 70,70 0 0,1 32,248" stroke-width="1.1"/>
+	          <polygon points="200,135 246,154 265,200 246,246 200,265 154,246 135,200 154,154" stroke-width="0.8"/>
+	          <polygon points="200,155 245,200 200,245 155,200" stroke-width="0.7"/>
+	          <circle cx="200" cy="22" r="5" fill="#b86b2c" stroke="none" opacity="0.8"/>
+	          <circle cx="200" cy="378" r="5" fill="#b86b2c" stroke="none" opacity="0.8"/>
+	          <circle cx="22" cy="200" r="5" fill="#b86b2c" stroke="none" opacity="0.8"/>
+	          <circle cx="378" cy="200" r="5" fill="#b86b2c" stroke="none" opacity="0.8"/>
+	          <g stroke-width="1.4" opacity="0.5">
+	            <line x1="200" y1="50" x2="200" y2="66"/>
+	            <line x1="350" y1="200" x2="334" y2="200"/>
+	            <line x1="200" y1="350" x2="200" y2="334"/>
+	            <line x1="50" y1="200" x2="66" y2="200"/>
+	            <line x1="306" y1="94" x2="298" y2="102"/>
+	            <line x1="306" y1="306" x2="298" y2="298"/>
+	            <line x1="94" y1="306" x2="102" y2="298"/>
+	            <line x1="94" y1="94" x2="102" y2="102"/>
+	          </g>
+	        </svg>
+	      </div></div>
+	    </div>
+	
+	    <!-- Circle 3: Hexagram ═ medium-large, bottom-left -->
+	    <div class="bg-magic bg-magic--3">
+	      <div class="bg-magic__parallax"><div class="bg-magic__inner">
+	        <svg viewBox="0 0 400 400" fill="none" stroke="#b86b2c" xmlns="http://www.w3.org/2000/svg">
+	          <circle cx="200" cy="200" r="192" stroke-width="1.3"/>
+	          <circle cx="200" cy="200" r="176" stroke-width="0.6" stroke-dasharray="5 20"/>
+	          <circle cx="200" cy="200" r="156" stroke-width="0.9"/>
+	          <circle cx="200" cy="200" r="134" stroke-width="0.5" stroke-dasharray="3 14"/>
+	          <polygon points="200,14 361,294 39,294" stroke-width="1.2"/>
+	          <polygon points="200,386 39,106 361,106" stroke-width="1.2"/>
+	          <polygon points="200,68 320,130 320,270 200,332 80,270 80,130" stroke-width="0.8"/>
+	          <circle cx="200" cy="14" r="4" fill="#b86b2c" stroke="none" opacity="0.75"/>
+	          <circle cx="361" cy="294" r="4" fill="#b86b2c" stroke="none" opacity="0.75"/>
+	          <circle cx="39" cy="294" r="4" fill="#b86b2c" stroke="none" opacity="0.75"/>
+	          <circle cx="200" cy="386" r="4" fill="#b86b2c" stroke="none" opacity="0.75"/>
+	          <circle cx="39" cy="106" r="4" fill="#b86b2c" stroke="none" opacity="0.75"/>
+	          <circle cx="361" cy="106" r="4" fill="#b86b2c" stroke="none" opacity="0.75"/>
+	          <circle cx="200" cy="200" r="10" stroke-width="1"/>
+	          <circle cx="200" cy="200" r="4" fill="#b86b2c" stroke="none" opacity="0.45"/>
+	        </svg>
+	      </div></div>
+	    </div>
+	
+	    <!-- Circle 4: Octagram Compass ═ medium, upper-right area -->
+	    <div class="bg-magic bg-magic--4">
+	      <div class="bg-magic__parallax"><div class="bg-magic__inner">
+	        <svg viewBox="0 0 400 400" fill="none" stroke="#b86b2c" xmlns="http://www.w3.org/2000/svg">
+	          <circle cx="200" cy="200" r="190" stroke-width="1.2"/>
+	          <circle cx="200" cy="200" r="174" stroke-width="0.5" stroke-dasharray="3 18"/>
+	          <circle cx="200" cy="200" r="152" stroke-width="0.8"/>
+	          <circle cx="200" cy="200" r="130" stroke-width="0.4" stroke-dasharray="7 28"/>
+	          <polygon points="200,14 246,154 386,200 246,246 200,386 154,246 14,200 154,154" stroke-width="1"/>
+	          <line x1="200" y1="14" x2="200" y2="386" stroke-width="0.5"/>
+	          <line x1="14" y1="200" x2="386" y2="200" stroke-width="0.5"/>
+	          <line x1="68" y1="68" x2="332" y2="332" stroke-width="0.4"/>
+	          <line x1="332" y1="68" x2="68" y2="332" stroke-width="0.4"/>
+	          <circle cx="200" cy="200" r="95" stroke-width="0.6"/>
+	          <polygon points="200,172 228,200 200,228 172,200" stroke-width="0.9"/>
+	          <circle cx="200" cy="200" r="4" fill="#b86b2c" stroke="none" opacity="0.5"/>
+	          <circle cx="200" cy="18" r="3.5" fill="#b86b2c" stroke="none" opacity="0.7"/>
+	          <circle cx="382" cy="200" r="3.5" fill="#b86b2c" stroke="none" opacity="0.7"/>
+	          <circle cx="200" cy="382" r="3.5" fill="#b86b2c" stroke="none" opacity="0.7"/>
+	          <circle cx="18" cy="200" r="3.5" fill="#b86b2c" stroke="none" opacity="0.7"/>
+	        </svg>
+	      </div></div>
+	    </div>
+	
+	    <!-- Circle 5: Triple Ring Sigil ═ medium-small, mid-left -->
+	    <div class="bg-magic bg-magic--5">
+	      <div class="bg-magic__parallax"><div class="bg-magic__inner">
+	        <svg viewBox="0 0 400 400" fill="none" stroke="#b86b2c" xmlns="http://www.w3.org/2000/svg">
+	          <circle cx="200" cy="200" r="188" stroke-width="1.4"/>
+	          <circle cx="200" cy="200" r="168" stroke-width="0.7" stroke-dasharray="10 26"/>
+	          <circle cx="200" cy="200" r="144" stroke-width="1.0"/>
+	          <line x1="200" y1="12" x2="200" y2="388" stroke-width="0.6"/>
+	          <line x1="12" y1="200" x2="388" y2="200" stroke-width="0.6"/>
+	          <line x1="67" y1="67" x2="333" y2="333" stroke-width="0.45" opacity="0.5"/>
+	          <line x1="333" y1="67" x2="67" y2="333" stroke-width="0.45" opacity="0.5"/>
+	          <polygon points="200,145 255,200 200,255 145,200" stroke-width="0.8"/>
+	          <path d="M 160,48 A 55,55 0 0,1 240,48" stroke-width="0.8"/>
+	          <path d="M 352,160 A 55,55 0 0,1 352,240" stroke-width="0.8"/>
+	          <path d="M 160,352 A 55,55 0 0,1 240,352" stroke-width="0.8"/>
+	          <path d="M 48,160 A 55,55 0 0,1 48,240" stroke-width="0.8"/>
+	          <circle cx="200" cy="200" r="8" stroke-width="1.1"/>
+	          <circle cx="200" cy="200" r="3" fill="#b86b2c" stroke="none" opacity="0.5"/>
+	          <circle cx="200" cy="16" r="4" fill="#b86b2c" stroke="none" opacity="0.7"/>
+	          <circle cx="384" cy="200" r="4" fill="#b86b2c" stroke="none" opacity="0.7"/>
+	          <circle cx="200" cy="384" r="4" fill="#b86b2c" stroke="none" opacity="0.7"/>
+	          <circle cx="16" cy="200" r="4" fill="#b86b2c" stroke="none" opacity="0.7"/>
+	        </svg>
+	      </div></div>
+	    </div>
+	
+	    <!-- Circle 6: Compact Ward ═ small accent, bottom-right -->
+	    <div class="bg-magic bg-magic--6">
+	      <div class="bg-magic__parallax"><div class="bg-magic__inner">
+	        <svg viewBox="0 0 400 400" fill="none" stroke="#b86b2c" xmlns="http://www.w3.org/2000/svg">
+	          <circle cx="200" cy="200" r="192" stroke-width="1.6"/>
+	          <circle cx="200" cy="200" r="174" stroke-width="0.7" stroke-dasharray="5 15"/>
+	          <line x1="200" y1="8" x2="200" y2="392" stroke-width="0.6"/>
+	          <line x1="8" y1="200" x2="392" y2="200" stroke-width="0.6"/>
+	          <line x1="64" y1="64" x2="336" y2="336" stroke-width="0.4" opacity="0.45"/>
+	          <line x1="336" y1="64" x2="64" y2="336" stroke-width="0.4" opacity="0.45"/>
+	          <polygon points="200,155 245,200 200,245 155,200" stroke-width="0.9"/>
+	          <circle cx="200" cy="200" r="6" stroke-width="1.2"/>
+	          <circle cx="200" cy="200" r="2.5" fill="#b86b2c" stroke="none" opacity="0.6"/>
+	          <circle cx="200" cy="12" r="4.5" fill="#b86b2c" stroke="none" opacity="0.8"/>
+	          <circle cx="388" cy="200" r="4.5" fill="#b86b2c" stroke="none" opacity="0.8"/>
+	          <circle cx="200" cy="388" r="4.5" fill="#b86b2c" stroke="none" opacity="0.8"/>
+	          <circle cx="12" cy="200" r="4.5" fill="#b86b2c" stroke="none" opacity="0.8"/>
+	        </svg>
+	      </div></div>
+	    </div>
+	
+	    <!-- Floating particles --></div>
+
+    <!-- Floating particles -->
+    <div class="hero-particles" id="heroParticles"></div>
+
+    <div class="hero-content fade-up">
+      <div class="hero-badge" data-en="Official Codex" data-zh="官方法典">Official Codex</div>
+      <h1 class="hero-title">DEAD<span class="accent">LOCK</span></h1>
+      <p class="hero-subtitle" data-en="Codex of Agents — Master the Arcane Arts of Combat" data-zh="英雄法典 — 掌握奥术战斗技艺">Codex of Agents — Master the Arcane Arts of Combat</p>
+      <div class="hero-divider"></div>
+      <p class="hero-desc" data-en="Step into the shadows of a forsaken metropolis where eight extraordinary agents wage an eternal war. Each bearing unique powers drawn from the void, they fight not for glory, but for the fate of reality itself." data-zh="踏入被遗弃都市的暗影，八位非凡英雄在此展开永恒之战。每一位都拥有来自虚空的力量，他们不为荣耀而战，而是为了现实本身的命运。">Step into the shadows of a forsaken metropolis where eight extraordinary agents wage an eternal war. Each bearing unique powers drawn from the void, they fight not for glory, but for the fate of reality itself.</p>
     </div>
-    
-    <!-- Modal -->
-    <div class="modal" id="guideModal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">✕</button>
-            <div id="modalBody">
-                <div style="text-align:center; padding:2rem;">
-                    <i class="fas fa-circle-notch fa-spin" style="font-size:2rem; color:#00f2ff;"></i>
-                    <p style="margin-top:1rem;">> loading agent data ...</p>
-                </div>
-            </div>
+  </section>
+
+  <!-- Divider -->
+  <div class="section-divider"><div class="line"></div><div class="diamond"></div><div class="line"></div></div>
+
+  <!-- ─── HEROES ────────────────────────────────── -->
+  <section class="heroes" id="heroes">
+    <div class="section-header fade-up">
+      <div class="section-label" data-en="The Eight Aspects" data-zh="八面之相">The Eight Aspects</div>
+      <h2 class="section-title" data-en="Agents of the <span class='accent'>Codex</span>" data-zh="<span class='accent'>法典</span>英雄录">Agents of the <span class="accent">Codex</span></h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="heroes-grid">
+
+      <!-- AGENT_07 :: Vanguard :: #00D2FF -->
+      <div class="hero-card fade-up" data-theme="#00D2FF" style="--ring-color:rgba(0,210,255,0.35);box-shadow:0 0 18px rgba(0,210,255,0.10);">
+        <div class="magic-ring magic-ring--outer" style="--ring-color:rgba(0,210,255,0.22);"></div>
+        <div class="magic-ring magic-ring--inner" style="--ring-color:rgba(0,210,255,0.16);"></div>
+        <div class="magic-ring magic-ring--glyphs" style="--ring-color:rgba(0,210,255,0.10);"></div>
+        <div class="card-corner tl" style="--ring-color:rgba(0,210,255,0.5);"></div>
+        <div class="card-corner tr" style="--ring-color:rgba(0,210,255,0.5);"></div>
+        <div class="card-corner bl" style="--ring-color:rgba(0,210,255,0.5);"></div>
+        <div class="card-corner br" style="--ring-color:rgba(0,210,255,0.5);"></div>
+        <div class="card-avatar">
+          <div class="card-avatar-bg" style="background:radial-gradient(circle,#00D2FF,transparent);"></div>
+          <span style="color:#00D2FF">07</span>
         </div>
+        <div class="card-code" style="--ring-color:#00D2FF;">AGENT_07</div>
+        <div class="card-role" data-en="Vanguard" data-zh="先锋">Vanguard</div>
+        <p class="card-desc" data-en="Frost-forged titan. Commands the battlefield with glacial barriers." data-zh="冰铸泰坦，以冰川屏障号令战场。">Frost-forged titan. Commands the battlefield with glacial barriers.</p>
+      </div>
+
+      <!-- AGENT_13 :: Marksman :: #FF5E00 -->
+      <div class="hero-card fade-up" data-theme="#FF5E00" style="--ring-color:rgba(255,94,0,0.35);box-shadow:0 0 18px rgba(255,94,0,0.10);">
+        <div class="magic-ring magic-ring--outer" style="--ring-color:rgba(255,94,0,0.22);"></div>
+        <div class="magic-ring magic-ring--inner" style="--ring-color:rgba(255,94,0,0.16);"></div>
+        <div class="magic-ring magic-ring--glyphs" style="--ring-color:rgba(255,94,0,0.10);"></div>
+        <div class="card-corner tl" style="--ring-color:rgba(255,94,0,0.5);"></div>
+        <div class="card-corner tr" style="--ring-color:rgba(255,94,0,0.5);"></div>
+        <div class="card-corner bl" style="--ring-color:rgba(255,94,0,0.5);"></div>
+        <div class="card-corner br" style="--ring-color:rgba(255,94,0,0.5);"></div>
+        <div class="card-avatar">
+          <div class="card-avatar-bg" style="background:radial-gradient(circle,#FF5E00,transparent);"></div>
+          <span style="color:#FF5E00">13</span>
+        </div>
+        <div class="card-code" style="--ring-color:#FF5E00;">AGENT_13</div>
+        <div class="card-role" data-en="Marksman" data-zh="射手">Marksman</div>
+        <p class="card-desc" data-en="Inferno marksman. Searing shots that melt through any armor." data-zh="炼狱射手，灼热弹道熔穿一切护甲。">Inferno marksman. Searing shots that melt through any armor.</p>
+      </div>
+
+      <!-- AGENT_22 :: Controller :: #00E5A0 -->
+      <div class="hero-card fade-up" data-theme="#00E5A0" style="--ring-color:rgba(0,229,160,0.35);box-shadow:0 0 18px rgba(0,229,160,0.10);">
+        <div class="magic-ring magic-ring--outer" style="--ring-color:rgba(0,229,160,0.22);"></div>
+        <div class="magic-ring magic-ring--inner" style="--ring-color:rgba(0,229,160,0.16);"></div>
+        <div class="magic-ring magic-ring--glyphs" style="--ring-color:rgba(0,229,160,0.10);"></div>
+        <div class="card-corner tl" style="--ring-color:rgba(0,229,160,0.5);"></div>
+        <div class="card-corner tr" style="--ring-color:rgba(0,229,160,0.5);"></div>
+        <div class="card-corner bl" style="--ring-color:rgba(0,229,160,0.5);"></div>
+        <div class="card-corner br" style="--ring-color:rgba(0,229,160,0.5);"></div>
+        <div class="card-avatar">
+          <div class="card-avatar-bg" style="background:radial-gradient(circle,#00E5A0,transparent);"></div>
+          <span style="color:#00E5A0">22</span>
+        </div>
+        <div class="card-code" style="--ring-color:#00E5A0;">AGENT_22</div>
+        <div class="card-role" data-en="Controller" data-zh="掌控者">Controller</div>
+        <p class="card-desc" data-en="Toxic alchemist. Bends the battlefield with corrosive mists." data-zh="剧毒炼金师，以腐蚀迷雾扭曲战场。">Toxic alchemist. Bends the battlefield with corrosive mists.</p>
+      </div>
+
+      <!-- AGENT_31 :: Specialist :: #C084FC -->
+      <div class="hero-card fade-up" data-theme="#C084FC" style="--ring-color:rgba(192,132,252,0.35);box-shadow:0 0 18px rgba(192,132,252,0.10);">
+        <div class="magic-ring magic-ring--outer" style="--ring-color:rgba(192,132,252,0.22);"></div>
+        <div class="magic-ring magic-ring--inner" style="--ring-color:rgba(192,132,252,0.16);"></div>
+        <div class="magic-ring magic-ring--glyphs" style="--ring-color:rgba(192,132,252,0.10);"></div>
+        <div class="card-corner tl" style="--ring-color:rgba(192,132,252,0.5);"></div>
+        <div class="card-corner tr" style="--ring-color:rgba(192,132,252,0.5);"></div>
+        <div class="card-corner bl" style="--ring-color:rgba(192,132,252,0.5);"></div>
+        <div class="card-corner br" style="--ring-color:rgba(192,132,252,0.5);"></div>
+        <div class="card-avatar">
+          <div class="card-avatar-bg" style="background:radial-gradient(circle,#C084FC,transparent);"></div>
+          <span style="color:#C084FC">31</span>
+        </div>
+        <div class="card-code" style="--ring-color:#C084FC;">AGENT_31</div>
+        <div class="card-role" data-en="Specialist" data-zh="专家">Specialist</div>
+        <p class="card-desc" data-en="Spectral medium. Shatters the veil between worlds." data-zh="灵媒使者，撕裂世界之间的帷幕。">Spectral medium. Shatters the veil between worlds.</p>
+      </div>
+
+      <!-- AGENT_44 :: Sentinel :: #FFB347 -->
+      <div class="hero-card fade-up" data-theme="#FFB347" style="--ring-color:rgba(255,179,71,0.35);box-shadow:0 0 18px rgba(255,179,71,0.10);">
+        <div class="magic-ring magic-ring--outer" style="--ring-color:rgba(255,179,71,0.22);"></div>
+        <div class="magic-ring magic-ring--inner" style="--ring-color:rgba(255,179,71,0.16);"></div>
+        <div class="magic-ring magic-ring--glyphs" style="--ring-color:rgba(255,179,71,0.10);"></div>
+        <div class="card-corner tl" style="--ring-color:rgba(255,179,71,0.5);"></div>
+        <div class="card-corner tr" style="--ring-color:rgba(255,179,71,0.5);"></div>
+        <div class="card-corner bl" style="--ring-color:rgba(255,179,71,0.5);"></div>
+        <div class="card-corner br" style="--ring-color:rgba(255,179,71,0.5);"></div>
+        <div class="card-avatar">
+          <div class="card-avatar-bg" style="background:radial-gradient(circle,#FFB347,transparent);"></div>
+          <span style="color:#FFB347">44</span>
+        </div>
+        <div class="card-code" style="--ring-color:#FFB347;">AGENT_44</div>
+        <div class="card-role" data-en="Sentinel" data-zh="哨卫">Sentinel</div>
+        <p class="card-desc" data-en="Gilded protector. Radiant shields that turn the tide of battle." data-zh="鎏金守护者，光辉之盾扭转战局。">Gilded protector. Radiant shields that turn the tide of battle.</p>
+      </div>
+
+      <!-- AGENT_56 :: Skirmisher :: #FF6B8B -->
+      <div class="hero-card fade-up" data-theme="#FF6B8B" style="--ring-color:rgba(255,107,139,0.35);box-shadow:0 0 18px rgba(255,107,139,0.10);">
+        <div class="magic-ring magic-ring--outer" style="--ring-color:rgba(255,107,139,0.22);"></div>
+        <div class="magic-ring magic-ring--inner" style="--ring-color:rgba(255,107,139,0.16);"></div>
+        <div class="magic-ring magic-ring--glyphs" style="--ring-color:rgba(255,107,139,0.10);"></div>
+        <div class="card-corner tl" style="--ring-color:rgba(255,107,139,0.5);"></div>
+        <div class="card-corner tr" style="--ring-color:rgba(255,107,139,0.5);"></div>
+        <div class="card-corner bl" style="--ring-color:rgba(255,107,139,0.5);"></div>
+        <div class="card-corner br" style="--ring-color:rgba(255,107,139,0.5);"></div>
+        <div class="card-avatar">
+          <div class="card-avatar-bg" style="background:radial-gradient(circle,#FF6B8B,transparent);"></div>
+          <span style="color:#FF6B8B">56</span>
+        </div>
+        <div class="card-code" style="--ring-color:#FF6B8B;">AGENT_56</div>
+        <div class="card-role" data-en="Skirmisher" data-zh="游击兵">Skirmisher</div>
+        <p class="card-desc" data-en="Petal dancer. Swift strikes bloom into lethal gardens." data-zh="花舞者，迅捷打击绽放为致命花园。">Petal dancer. Swift strikes bloom into lethal gardens.</p>
+      </div>
+
+      <!-- AGENT_69 :: Assassin :: #E60049 -->
+      <div class="hero-card fade-up" data-theme="#E60049" style="--ring-color:rgba(230,0,73,0.35);box-shadow:0 0 18px rgba(230,0,73,0.10);">
+        <div class="magic-ring magic-ring--outer" style="--ring-color:rgba(230,0,73,0.22);"></div>
+        <div class="magic-ring magic-ring--inner" style="--ring-color:rgba(230,0,73,0.16);"></div>
+        <div class="magic-ring magic-ring--glyphs" style="--ring-color:rgba(230,0,73,0.10);"></div>
+        <div class="card-corner tl" style="--ring-color:rgba(230,0,73,0.5);"></div>
+        <div class="card-corner tr" style="--ring-color:rgba(230,0,73,0.5);"></div>
+        <div class="card-corner bl" style="--ring-color:rgba(230,0,73,0.5);"></div>
+        <div class="card-corner br" style="--ring-color:rgba(230,0,73,0.5);"></div>
+        <div class="card-avatar">
+          <div class="card-avatar-bg" style="background:radial-gradient(circle,#E60049,transparent);"></div>
+          <span style="color:#E60049">69</span>
+        </div>
+        <div class="card-code" style="--ring-color:#E60049;">AGENT_69</div>
+        <div class="card-role" data-en="Assassin" data-zh="刺客">Assassin</div>
+        <p class="card-desc" data-en="Blood wraith. Strikes from the abyss with crimson precision." data-zh="血之幽灵，从深渊中以猩红精准出击。">Blood wraith. Strikes from the abyss with crimson precision.</p>
+      </div>
+
+      <!-- AGENT_77 :: Warden :: #7B68EE -->
+      <div class="hero-card fade-up" data-theme="#7B68EE" style="--ring-color:rgba(123,104,238,0.35);box-shadow:0 0 18px rgba(123,104,238,0.10);">
+        <div class="magic-ring magic-ring--outer" style="--ring-color:rgba(123,104,238,0.22);"></div>
+        <div class="magic-ring magic-ring--inner" style="--ring-color:rgba(123,104,238,0.16);"></div>
+        <div class="magic-ring magic-ring--glyphs" style="--ring-color:rgba(123,104,238,0.10);"></div>
+        <div class="card-corner tl" style="--ring-color:rgba(123,104,238,0.5);"></div>
+        <div class="card-corner tr" style="--ring-color:rgba(123,104,238,0.5);"></div>
+        <div class="card-corner bl" style="--ring-color:rgba(123,104,238,0.5);"></div>
+        <div class="card-corner br" style="--ring-color:rgba(123,104,238,0.5);"></div>
+        <div class="card-avatar">
+          <div class="card-avatar-bg" style="background:radial-gradient(circle,#7B68EE,transparent);"></div>
+          <span style="color:#7B68EE">77</span>
+        </div>
+        <div class="card-code" style="--ring-color:#7B68EE;">AGENT_77</div>
+        <div class="card-role" data-en="Warden" data-zh="守望者">Warden</div>
+        <p class="card-desc" data-en="Soul binder. Ethereal chains that imprison the unworthy." data-zh="灵魂束缚者，以太锁链囚禁一切不洁之物。">Soul binder. Ethereal chains that imprison the unworthy.</p>
+      </div>
+
     </div>
-    
-    <script>
-        // ========== AGENT DATA (No real names shown in UI) ==========
-        const AGENTS = [
-            { id: 1, codename: "AGENT_07", role: "Vanguard", desc: "Frontline tank with high survivability and crowd control.", avatar: "🛡️", internal: "Abrams" },
-            { id: 2, codename: "AGENT_13", role: "Marksman", desc: "Long-range precision carry. High burst damage.", avatar: "🎯", internal: "Wraith" },
-            { id: 3, codename: "AGENT_22", role: "Controller", desc: "Frost support. Team protection and zone control.", avatar: "❄️", internal: "Kelvin" },
-            { id: 4, codename: "AGENT_45", role: "Burst Mage", desc: "Cooldown-based combos. Explosive damage output.", avatar: "🌀", internal: "Bebop" },
-            { id: 5, codename: "AGENT_66", role: "Blaster", desc: "Lightning storms. Massive area damage.", avatar: "🌩️", internal: "Seven" },
-            { id: 6, codename: "AGENT_88", role: "Assassin", desc: "Stealth infiltrator. Eliminates backline targets.", avatar: "🗡️", internal: "Haze" }
-        ];
-        
-        // ========== GUIDES DATA ==========
-        const GUIDES = [
-            { title: "[ ECONOMY ] Soul System Complete Guide", desc: "How to earn and spend souls effectively. Master the economy.", link: "/guides/soul-system.html" },
-            { title: "[ LANING ] Deny & Last Hit Mechanics", desc: "Win your lane with proper creep denial and last hitting.", link: "/guides/deny-guide.html" },
-            { title: "[ MAP ] Teleporters, Mid Boss & Soul Urn", desc: "Rotations, objective control, and map awareness.", link: "/guides/map-guide.html" },
-            { title: "[ ITEMIZATION ] Core Builds for Each Agent", desc: "Optimal item paths and situational choices.", link: "/guides/itemization.html" }
-        ];
-        
-        // ========== MODS DATA ==========
-        const MODS = [
-            { title: "[ INSTALLATION ] How to Install Deadlock Mods", desc: "Step-by-step guide from Nexus Mods to your game client.", link: "/mods/install-guide.html" },
-            { title: "[ ESSENTIALS ] Top 10 Mods for 2026", desc: "Curated collection of must-have mods. Updated monthly.", link: "/mods/top-mods.html" }
-        ];
-        
-        // ========== RENDER HERO GRID ==========
-        function renderHeroGrid() {
-            const grid = document.getElementById('heroGrid');
-            grid.innerHTML = AGENTS.map(agent => `
-                <div class="hero-card" data-agent-id="${agent.id}" data-agent-name="${agent.internal.toLowerCase()}">
-                    <div class="hero-avatar">${agent.avatar}</div>
-                    <div class="hero-codename">> ${agent.codename}</div>
-                    <div class="hero-role">[ ${agent.role} ]</div>
-                    <div class="hero-desc">${agent.desc}</div>
-                    <button class="cyber-btn" style="font-size:0.7rem; margin-top:0.5rem;" onclick="loadAgentGuide(${agent.id})">[ VIEW PROFILE ]</button>
-                </div>
-            `).join('');
-        }
-        
-        // ========== RENDER GUIDES ==========
-        function renderGuides() {
-            const container = document.getElementById('guideList');
-            container.innerHTML = GUIDES.map(guide => `
-                <div class="guide-item">
-                    <a href="#">${guide.title}</a>
-                    <p>${guide.desc}</p>
-                </div>
-            `).join('');
-        }
-        
-        // ========== RENDER MODS ==========
-        function renderMods() {
-            const container = document.getElementById('modsList');
-            container.innerHTML = MODS.map(mod => `
-                <div class="mod-card">
-                    <h3>${mod.title}</h3>
-                    <p>${mod.desc}</p>
-                    <a href="#" class="btn-link">[ ACCESS ] →</a>
-                </div>
-            `).join('');
-        }
-        
-        // ========== LOAD AGENT GUIDE (Will be replaced with DeepSeek API) ==========
-        async function loadAgentGuide(agentId) {
-            const agent = AGENTS.find(a => a.id === agentId);
-            if (!agent) return;
-            
-            const modal = document.getElementById('guideModal');
-            const modalBody = document.getElementById('modalBody');
-            
-            modal.style.display = 'flex';
-            modalBody.innerHTML = `
-                <div style="text-align:center; padding:2rem;">
-                    <i class="fas fa-circle-notch fa-spin" style="font-size:2rem; color:#00f2ff;"></i>
-                    <p style="margin-top:1rem;">> querying neural network for ${agent.codename} ...</p>
-                    <div class="progress-bar" style="width:150px; margin:1rem auto;"></div>
-                </div>
-            `;
-            
-            // TODO: Replace with actual DeepSeek API call via Cloudflare Worker
-            // For now, show demo data
-            setTimeout(() => {
-                modalBody.innerHTML = `
-                    <h2 style="color:#00f2ff; margin-bottom:0.5rem;">${agent.codename}</h2>
-                    <div style="color:#ff00aa; font-family:monospace; margin-bottom:1rem;">> ${agent.role} // CLASSIFIED</div>
-                    
-                    <h3 style="color:#00f2ff; margin:1rem 0 0.5rem;">⚔️ ABILITIES</h3>
-                    <div style="margin-bottom:0.8rem; border-left:2px solid #ff00aa; padding-left:0.8rem;">
-                        <strong>ABILITY_01</strong><br>
-                        <span style="font-size:0.85rem;">Primary offensive skill with moderate cooldown.</span>
-                        <div style="font-size:0.75rem; color:#aaa; margin-top:0.2rem;">💡 Use to initiate fights.</div>
-                    </div>
-                    <div style="margin-bottom:0.8rem; border-left:2px solid #ff00aa; padding-left:0.8rem;">
-                        <strong>ABILITY_02</strong><br>
-                        <span style="font-size:0.85rem;">Defensive/mobility skill for positioning.</span>
-                        <div style="font-size:0.75rem; color:#aaa; margin-top:0.2rem;">💡 Save for escape or chase.</div>
-                    </div>
-                    
-                    <h3 style="color:#00f2ff; margin:1rem 0 0.5rem;">🎮 PLAYSTYLE</h3>
-                    <p style="font-size:0.9rem;">${agent.desc} Focus on ${agent.role.toLowerCase()} positioning. Communicate with team for maximum impact.</p>
-                    
-                    <h3 style="color:#00f2ff; margin:1rem 0 0.5rem;">🛒 ITEM BUILD</h3>
-                    <div><strong>Early:</strong> Boots → Basic Damage → Regen</div>
-                    <div><strong>Core:</strong> Core Item A → Core Item B → Core Item C</div>
-                    <div><strong>Situational:</strong> Anti-heal, Armor, Mobility</div>
-                    
-                    <h3 style="color:#00f2ff; margin:1rem 0 0.5rem;">💡 TIPS</h3>
-                    <ul style="margin-left:1rem;">
-                        <li>Learn ability combos in practice mode.</li>
-                        <li>Coordinate ultimate with team.</li>
-                        <li>Track enemy cooldowns before engaging.</li>
-                    </ul>
-                    
-                    <p style="margin-top:1rem; font-size:0.7rem; text-align:center; color:#668;">> data fetched from DEADLOCK.DB // v1.0 &lt;</p>
-                `;
-            }, 1000);
-        }
-        
-        function closeModal() {
-            document.getElementById('guideModal').style.display = 'none';
-        }
-        
-        // ========== FILTER HEROES ==========
-        function filterHeroes() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const cards = document.querySelectorAll('.hero-card');
-            cards.forEach(card => {
-                const text = card.innerText.toLowerCase();
-                card.style.display = text.includes(searchTerm) ? '' : 'none';
-            });
-        }
-        
-        // ========== THEME TOGGLE (Cyber/Matrix) ==========
-        let darkMode = true;
-        document.getElementById('themeBtn').addEventListener('click', () => {
-            darkMode = !darkMode;
-            document.body.style.background = darkMode ? '#0b0b12' : '#e8e8f0';
-            document.body.style.color = darkMode ? '#e0e0e8' : '#1a1a2e';
-            document.querySelector('.navbar').style.background = darkMode ? 'rgba(8,8,18,0.95)' : 'rgba(240,240,250,0.95)';
+  </section>
+
+  <!-- Divider -->
+  <div class="section-divider"><div class="line"></div><div class="diamond"></div><div class="line"></div></div>
+
+  <!-- ─── GUIDES ────────────────────────────────── -->
+  <section class="guides" id="guides">
+    <div class="section-header fade-up">
+      <div class="section-label" data-en="Forbidden Knowledge" data-zh="禁忌学识">Forbidden Knowledge</div>
+      <h2 class="section-title" data-en="Tactical <span class='accent'>Grimoires</span>" data-zh="战术<span class='accent'>魔典</span>">Tactical <span class="accent">Grimoires</span></h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="guides-grid">
+      <div class="guide-card fade-up">
+        <span class="guide-number">01</span>
+        <span class="guide-icon">&#9768;</span>
+        <h3 data-en="Getting Started" data-zh="入门指南">Getting Started</h3>
+        <p data-en="Essential mechanics every new agent must master before stepping into the void." data-zh="每位新英雄踏入虚空前必须掌握的核心机制。">Essential mechanics every new agent must master before stepping into the void.</p>
+      </div>
+      <div class="guide-card fade-up">
+        <span class="guide-number">02</span>
+        <span class="guide-icon">&#9881;</span>
+        <h3 data-en="Ability Synergies" data-zh="技能协同">Ability Synergies</h3>
+        <p data-en="Uncover devastating combinations between agents and their arcane abilities." data-zh="揭示英雄与奥术能力之间的毁灭性组合。">Uncover devastating combinations between agents and their arcane abilities.</p>
+      </div>
+      <div class="guide-card fade-up">
+        <span class="guide-number">03</span>
+        <span class="guide-icon">&#9864;</span>
+        <h3 data-en="Map Control" data-zh="地图控制">Map Control</h3>
+        <p data-en="Dominate the battlefield through strategic positioning and route manipulation." data-zh="通过战略定位和路线操控主宰战场。">Dominate the battlefield through strategic positioning and route manipulation.</p>
+      </div>
+      <div class="guide-card fade-up">
+        <span class="guide-number">04</span>
+        <span class="guide-icon">&#9876;</span>
+        <h3 data-en="Advanced Tactics" data-zh="高级战术">Advanced Tactics</h3>
+        <p data-en="Pro-level strategies: wave management, soul economy, and dimensional rifts." data-zh="职业级策略：兵线管理、灵魂经济与维度裂隙。">Pro-level strategies: wave management, soul economy, and dimensional rifts.</p>
+      </div>
+      <div class="guide-card fade-up">
+        <span class="guide-number">05</span>
+        <span class="guide-icon">&#9900;</span>
+        <h3 data-en="Counter Picks" data-zh="反制选择">Counter Picks</h3>
+        <p data-en="Study the ancient charts. Learn which agent counters whom in the eternal cycle." data-zh="研习古老图表，了解永恒循环中英雄之间的克制关系。">Study the ancient charts. Learn which agent counters whom in the eternal cycle.</p>
+      </div>
+      <div class="guide-card fade-up">
+        <span class="guide-number">06</span>
+        <span class="guide-icon">&#9790;</span>
+        <h3 data-en="Soul Economy" data-zh="灵魂经济">Soul Economy</h3>
+        <p data-en="Master the flow of souls — the currency of power in the Deadlock universe." data-zh="掌握灵魂流动——Deadlock宇宙中的力量货币。">Master the flow of souls — the currency of power in the Deadlock universe.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Divider -->
+  <div class="section-divider"><div class="line"></div><div class="diamond"></div><div class="line"></div></div>
+
+  <!-- ─── MODS ──────────────────────────────────── -->
+  <section class="mods" id="mods">
+    <div class="section-header fade-up">
+      <div class="section-label" data-en="Arcane Enhancements" data-zh="奥术增强">Arcane Enhancements</div>
+      <h2 class="section-title" data-en="Void <span class='accent'>Modifications</span>" data-zh="虚空<span class='accent'>改造</span>">Void <span class="accent">Modifications</span></h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="mods-grid">
+      <div class="mod-card fade-up">
+        <span class="mod-tag">UI</span>
+        <h3 data-en="Arcane HUD" data-zh="奥术界面">Arcane HUD</h3>
+        <p data-en="A minimalistic overlay that reveals hidden soul counts, ability cooldowns, and enemy ult timers." data-zh="极简覆盖界面，揭示隐藏的灵魂计数、技能冷却与敌人大招计时。">A minimalistic overlay that reveals hidden soul counts, ability cooldowns, and enemy ult timers.</p>
+        <span class="mod-dl" data-en="Download &rarr;" data-zh="下载 &rarr;">Download &rarr;</span>
+      </div>
+      <div class="mod-card fade-up">
+        <span class="mod-tag">AUDIO</span>
+        <h3 data-en="Necropolis Audio" data-zh="亡灵音频">Necropolis Audio</h3>
+        <p data-en="Replace all in-game sounds with a dark orchestral score inspired by 1930s noir cinema." data-zh="将游戏音效替换为1930年代黑暗电影的管弦乐谱。">Replace all in-game sounds with a dark orchestral score inspired by 1930s noir cinema.</p>
+        <span class="mod-dl" data-en="Download &rarr;" data-zh="下载 &rarr;">Download &rarr;</span>
+      </div>
+      <div class="mod-card fade-up">
+        <span class="mod-tag">VISUAL</span>
+        <h3 data-en="Ritualistic Skins" data-zh="仪式皮肤">Ritualistic Skins</h3>
+        <p data-en="Hand-crafted agent skins inspired by occult rituals, celestial alignments, and forgotten ceremonies." data-zh="手工制作的英雄皮肤，灵感来自神秘仪式、天体排列与被遗忘的典礼。">Hand-crafted agent skins inspired by occult rituals, celestial alignments, and forgotten ceremonies.</p>
+        <span class="mod-dl" data-en="Download &rarr;" data-zh="下载 &rarr;">Download &rarr;</span>
+      </div>
+      <div class="mod-card fade-up">
+        <span class="mod-tag">TOOL</span>
+        <h3 data-en="Void Training" data-zh="虚空训练">Void Training</h3>
+        <p data-en="Practice arena with customizable scenarios. Hone your skills against AI phantoms." data-zh="可自定义场景的练习场，在AI幽灵对决中打磨技巧。">Practice arena with customizable scenarios. Hone your skills against AI phantoms.</p>
+        <span class="mod-dl" data-en="Access &rarr;" data-zh="进入 &rarr;">Access &rarr;</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════════════════════════════════ -->
+<footer class="footer" id="footer">
+  <div class="footer-top">
+    <a href="#hero" class="nav-logo" style="font-size:1.2rem;">DEAD<span>LOCK</span></a>
+    <div class="footer-links">
+      <a href="#hero"   data-en="Home"   data-zh="首页">Home</a>
+      <a href="#heroes" data-en="Heroes" data-zh="英雄">Heroes</a>
+      <a href="#guides" data-en="Guides" data-zh="攻略">Guides</a>
+      <a href="#mods"   data-en="Mods"   data-zh="模组">Mods</a>
+    </div>
+  </div>
+  <div class="footer-divider"></div>
+  <div class="footer-bottom">
+    <p data-en="Deadlock Codex — An Unofficial Fan Archive. Not affiliated with Valve Corporation." data-zh="Deadlock 法典 — 非官方粉丝档案馆。与 Valve Corporation 无关。">Deadlock Codex — An Unofficial Fan Archive. Not affiliated with Valve Corporation.</p>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+   CANDLE DECORATION
+   ═══════════════════════════════════════════════════════════════════════════ -->
+<div class="candle-container">
+  <div class="candle-flame"></div>
+  <div class="candle-wick"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+   JAVASCRIPT
+   ═══════════════════════════════════════════════════════════════════════════ -->
+<script>
+(function() {
+  'use strict';
+
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var isMobile = window.matchMedia('(max-width: 768px)').matches;
+  var ticking = false;
+  var parallaxTicking = false;
+
+  /* ══════════════════════════════════════════════════
+     1. MOUSE SPOTLIGHT
+     ══════════════════════════════════════════════════ */
+  var spotlight = document.getElementById('mouseSpotlight');
+  if (spotlight && !reducedMotion && !isMobile) {
+    var mx = 50, my = 50;
+    var smx = 50, smy = 50;
+    document.addEventListener('mousemove', function(e) {
+      mx = (e.clientX / window.innerWidth) * 100;
+      my = (e.clientY / window.innerHeight) * 100;
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(function() {
+          smx += (mx - smx) * 0.15;
+          smy += (my - smy) * 0.15;
+          spotlight.style.setProperty('--mx', smx + '%');
+          spotlight.style.setProperty('--my', smy + '%');
+          ticking = false;
         });
-        
-        // ========== MOBILE MENU ==========
-        document.getElementById('menuToggle').addEventListener('click', () => {
-            document.getElementById('navLinks').classList.toggle('active');
-        });
-        
-        // ========== INITIALIZE ==========
-        renderHeroGrid();
-        renderGuides();
-        renderMods();
-    </script>
+      }
+    }, { passive: true });
+  }
+
+  /* ══════════════════════════════════════════════════
+     2. CARD 3D TILT
+     ══════════════════════════════════════════════════ */
+  if (!reducedMotion && !isMobile) {
+    document.querySelectorAll('.hero-card').forEach(function(card) {
+      card.classList.add('hero-card--tilt-active');
+      var avatar = card.querySelector('.card-avatar');
+      var code = card.querySelector('.card-code');
+      var role = card.querySelector('.card-role');
+      var desc = card.querySelector('.card-desc');
+
+      card.addEventListener('mouseenter', function(e) {
+        card.style.transition = 'transform 0.1s ease-out, box-shadow 0.25s ease';
+      });
+
+      card.addEventListener('mousemove', function(e) {
+        var rect = card.getBoundingClientRect();
+        var x = (e.clientX - rect.left) / rect.width - 0.5;
+        var y = (e.clientY - rect.top) / rect.height - 0.5;
+        var rx = y * -10;
+        var ry = x * 10;
+        card.style.transform = 'perspective(800px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) translateY(-3px)';
+        if (avatar) avatar.style.transform = 'translateZ(18px)';
+        if (code) code.style.transform = 'translateZ(12px)';
+        if (role) role.style.transform = 'translateZ(10px)';
+        if (desc) desc.style.transform = 'translateZ(6px)';
+      });
+
+      card.addEventListener('mouseleave', function() {
+        card.style.transition = 'transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.25s ease';
+        card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) translateY(0)';
+        if (avatar) avatar.style.transform = 'translateZ(0)';
+        if (code) code.style.transform = 'translateZ(0)';
+        if (role) role.style.transform = 'translateZ(0)';
+        if (desc) desc.style.transform = 'translateZ(0)';
+      });
+    });
+  }
+
+  /* ══════════════════════════════════════════════════
+     3. CLICK RIPPLE
+     ══════════════════════════════════════════════════ */
+  if (!reducedMotion) {
+    document.addEventListener('click', function(e) {
+      var target = e.target.closest('.hero-card, .guide-card, .mod-card, #navLang button');
+      if (!target) return;
+      if (!target.classList.contains('ripple-container')) {
+        target.classList.add('ripple-container');
+      }
+      var ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      var rect = target.getBoundingClientRect();
+      var size = Math.max(rect.width, rect.height) * 0.8;
+      ripple.style.width = size + 'px';
+      ripple.style.height = size + 'px';
+      ripple.style.left = (e.clientX - rect.left) + 'px';
+      ripple.style.top = (e.clientY - rect.top) + 'px';
+      target.appendChild(ripple);
+      ripple.addEventListener('animationend', function() {
+        ripple.remove();
+      });
+    });
+  }
+
+  /* ══════════════════════════════════════════════════
+     4. SCROLL PARALLAX
+     ══════════════════════════════════════════════════ */
+  if (!reducedMotion) {
+    var parallaxEls = document.querySelectorAll('.bg-magic__parallax');
+    var heroSection = document.getElementById('hero');
+    var parallaxRates = [0.04, 0.05, 0.03, 0.06, 0.04, 0.05];
+
+    function updateParallax() {
+      parallaxTicking = false;
+      var sy = window.scrollY;
+      var heroBottom = heroSection ? heroSection.offsetTop + heroSection.offsetHeight : 9999;
+      if (sy > heroBottom) return;
+      parallaxEls.forEach(function(el, i) {
+        var rate = parallaxRates[i] || 0.04;
+        el.style.transform = 'translateY(' + (sy * rate) + 'px)';
+      });
+    }
+
+    window.addEventListener('scroll', function() {
+      if (!parallaxTicking) {
+        parallaxTicking = true;
+        requestAnimationFrame(updateParallax);
+      }
+    }, { passive: true });
+  }
+
+  /* ══════════════════════════════════════════════════
+     5. READING PROGRESS BAR
+     ══════════════════════════════════════════════════ */
+  var progressBar = document.getElementById('readingProgress');
+  if (progressBar) {
+    function updateProgress() {
+      var docH = document.documentElement.scrollHeight - window.innerHeight;
+      var pct = docH > 0 ? window.scrollY / docH : 0;
+      progressBar.style.setProperty('--progress', pct);
+    }
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+  }
+
+  /* ══════════════════════════════════════════════════
+     6. STAGGERED SCROLL REVEAL (enhanced)
+     ══════════════════════════════════════════════════ */
+  // Initial fade-ups on load
+  document.querySelectorAll('.fade-up').forEach(function(el, i) {
+    setTimeout(function() { el.classList.add('visible'); }, i * 65);
+  });
+
+  var fadeObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var el = entry.target;
+        var parent = el.parentElement;
+        var siblings = parent ? Array.from(parent.children).filter(function(c) {
+          return c.classList.contains('fade-up');
+        }) : [];
+        var idx = siblings.indexOf(el);
+        setTimeout(function() { el.classList.add('visible'); }, idx * 70);
+        fadeObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.fade-up').forEach(function(el) { fadeObserver.observe(el); });
+
+  /* ══════════════════════════════════════════════════
+     7. NUMBER COUNTING
+     ══════════════════════════════════════════════════ */
+  if (!reducedMotion) {
+    var countObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        var targetNum = parseInt(el.getAttribute('data-count') || el.textContent.trim(), 10);
+        if (isNaN(targetNum) || targetNum === 0) return;
+        var duration = 1200;
+        var startTime = null;
+        var startVal = 0;
+
+        function step(ts) {
+          if (!startTime) startTime = ts;
+          var elapsed = ts - startTime;
+          var progress = Math.min(elapsed / duration, 1);
+          // ease-out quad
+          var eased = 1 - (1 - progress) * (1 - progress);
+          var current = Math.round(startVal + (targetNum - startVal) * eased);
+          el.textContent = current < 10 && targetNum >= 10 ? '0' + current : String(current);
+          if (progress < 1) {
+            requestAnimationFrame(step);
+          } else {
+            el.textContent = targetNum < 10 && el.getAttribute('data-count') ? '0' + targetNum : String(targetNum);
+          }
+        }
+
+        requestAnimationFrame(step);
+        countObserver.unobserve(el);
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.guide-number, .card-avatar span').forEach(function(el) {
+      var txt = el.textContent.trim();
+      var num = parseInt(txt, 10);
+      if (!isNaN(num) && num > 0) {
+        el.setAttribute('data-count', num);
+        el.textContent = '0' + num >= 10 ? '00' : '0';
+        countObserver.observe(el);
+      }
+    });
+  }
+
+  /* ══════════════════════════════════════════════════
+     8. LANGUAGE SWITCH (existing, preserved)
+     ══════════════════════════════════════════════════ */
+  var langBtns = document.querySelectorAll('#navLang button');
+  var savedLang = localStorage.getItem('dl-lang') || 'en';
+  applyLang(savedLang);
+
+  langBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var lang = this.getAttribute('data-lang');
+      applyLang(lang);
+      localStorage.setItem('dl-lang', lang);
+    });
+  });
+
+  function applyLang(lang) {
+    langBtns.forEach(function(b) {
+      b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+    });
+    document.documentElement.lang = lang;
+    document.body.classList.toggle('font-cn', lang === 'zh');
+    document.querySelectorAll('[data-en][data-zh]').forEach(function(el) {
+      var text = el.getAttribute('data-' + lang);
+      if (text !== null && text !== '') {
+        if (text.indexOf('<') !== -1) { el.innerHTML = text; }
+        else { el.textContent = text; }
+      }
+    });
+  }
+
+  /* ══════════════════════════════════════════════════
+     9. SMOOTH SCROLL (existing, preserved)
+     ══════════════════════════════════════════════════ */
+  document.querySelectorAll('.nav-links a, .footer-links a, .nav-logo').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      var href = this.getAttribute('href');
+      if (href && href.startsWith('#') && href.length > 1) {
+        e.preventDefault();
+        var target = document.querySelector(href);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          document.getElementById('navLinks').classList.remove('open');
+        }
+      }
+    });
+  });
+
+  /* ══════════════════════════════════════════════════
+     10. ACTIVE NAV ON SCROLL (existing, preserved)
+     ══════════════════════════════════════════════════ */
+  var sections = document.querySelectorAll('section[id]');
+  var navAs = document.querySelectorAll('.nav-links a');
+  var footerAs = document.querySelectorAll('.footer-links a');
+
+  function updateActive() {
+    var sy = window.scrollY + 120;
+    var current = '';
+    sections.forEach(function(sec) {
+      if (sec.offsetTop <= sy) current = sec.id;
+    });
+    navAs.forEach(function(a) {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+    footerAs.forEach(function(a) {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  }
+  window.addEventListener('scroll', updateActive, { passive: true });
+  updateActive();
+
+  /* ══════════════════════════════════════════════════
+     11. MOBILE NAV TOGGLE (existing, preserved)
+     ══════════════════════════════════════════════════ */
+  var toggle = document.getElementById('navToggle');
+  var navLinks = document.getElementById('navLinks');
+  toggle.addEventListener('click', function() { navLinks.classList.toggle('open'); });
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.nav')) navLinks.classList.remove('open');
+  });
+
+  /* ══════════════════════════════════════════════════
+     12. HERO PARTICLES (existing, preserved)
+     ══════════════════════════════════════════════════ */
+  var pc = document.getElementById('heroParticles');
+  if (pc) {
+    var frag = document.createDocumentFragment();
+    for (var i = 0; i < 20; i++) {
+      var p = document.createElement('div');
+      p.className = 'hero-particle';
+      var s = Math.random() * 3 + 1.5;
+      p.style.cssText =
+        'left:' + (Math.random() * 92 + 4) + '%;' +
+        'width:' + s + 'px;height:' + s + 'px;' +
+        '--dur:' + (Math.random() * 10 + 8) + 's;' +
+        '--delay:' + (Math.random() * 12) + 's;';
+      frag.appendChild(p);
+    }
+    pc.appendChild(frag);
+  }
+
+})();
+</script>
 </body>
 </html>
